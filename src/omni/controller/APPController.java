@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package omni.controlador;
+package omni.controller;
 
 /**
  *
  * @author grender
  */
-public class ControladorAPP {
+public class APPController {
      
     public static void openApp(String url){
         Runtime app = Runtime.getRuntime();
@@ -17,7 +17,6 @@ public class ControladorAPP {
             app.exec(url);
         }catch(Exception e){
             System.out.println("No se ha podido abrir la aplicacion");
-            e.printStackTrace();
         }
     }
 }

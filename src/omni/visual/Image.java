@@ -13,14 +13,14 @@ import javax.swing.ImageIcon;
  *
  * @author Grender
  */
-public class Imagen extends javax.swing.JPanel {
+public class Image extends javax.swing.JPanel {
         
         private int width;
         private int height;
         
         private String path;
     
-        public Imagen(int width, int height, String path) {
+        public Image(int width, int height, String path) {
             this.setSize(width, height);
             this.width = width;
             this.height = height;
@@ -29,11 +29,11 @@ public class Imagen extends javax.swing.JPanel {
 
         @Override
         public void paint(Graphics grafico) {
-            Dimension height = getSize();
+            Dimension size = getSize();
 
             ImageIcon Img = new ImageIcon(getClass().getResource(path));
 
-            grafico.drawImage(Img.getImage(), 0, 0, height.width, height.height, null);
+            grafico.drawImage(Img.getImage(), 0, 0, size.width, size.height, null);
 
             setOpaque(false);
             super.paintComponent(grafico);

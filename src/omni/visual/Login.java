@@ -29,14 +29,14 @@ public class Login extends javax.swing.JFrame {
         this.jPanel1.setBackground(new Color(202, 238, 255));
         this.jPanel2.setBackground(new Color(202, 238, 255));
         
-        this.jPanel1.add(new Imagen(400, 300, "/res/background.png"));
+        this.jPanel1.add(new Image(400, 300, "/res/background.png"));
         this.jPanel1.repaint();
         
         this.jLabel3.addMouseListener(new MouseListener(){
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                JFrame registro = new Registro();
+                JFrame registro = new Register();
                 registro.setVisible(true);
                 Login.this.dispose();
             }
@@ -191,7 +191,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JFrame principal = new Principal();
+        JFrame principal = new Main();
         principal.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
