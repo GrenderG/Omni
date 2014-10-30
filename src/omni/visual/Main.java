@@ -36,7 +36,8 @@ public class Main extends javax.swing.JFrame {
         this.jPanel1.setBackground(new Color(202, 238, 255));
         this.jPanel2.setBackground(new Color(43, 146, 198));
         this.jPanel3.setBackground(new Color(43, 146, 198));
-
+        
+        
     }
 
     
@@ -51,21 +52,23 @@ public class Main extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jScrollBar1 = new javax.swing.JScrollBar();
         jButton4 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
         jButton6 = new javax.swing.JButton();
-        jScrollBar2 = new javax.swing.JScrollBar();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -86,6 +89,7 @@ public class Main extends javax.swing.JFrame {
         jTabbedPane1.setName(""); // NOI18N
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel2.setAutoscrolls(true);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/instagram.png"))); // NOI18N
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -118,8 +122,7 @@ public class Main extends javax.swing.JFrame {
                         .addGap(68, 68, 68)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,10 +135,11 @@ public class Main extends javax.swing.JFrame {
                 .addGap(56, 56, 56)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(349, Short.MAX_VALUE))
-            .addComponent(jScrollBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Social", jPanel2);
+        jScrollPane1.setViewportView(jPanel2);
+
+        jTabbedPane1.addTab("Social", jScrollPane1);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
@@ -164,8 +168,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(68, 68, 68)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addComponent(jScrollBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,16 +179,17 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(555, Short.MAX_VALUE))
-            .addComponent(jScrollBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Aplicaciones", jPanel3);
+        jScrollPane2.setViewportView(jPanel3);
+
+        jTabbedPane1.addTab("Aplicaciones", jScrollPane2);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1233, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,13 +210,20 @@ public class Main extends javax.swing.JFrame {
 
         jMenu2.setText("Cuenta");
 
-        jMenuItem2.setText("Gestionar accesos");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        jMenu4.setText("Gestionar accesos");
+
+        jMenuItem8.setText("Gestionar webs");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                jMenuItem8ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenu4.add(jMenuItem8);
+
+        jMenuItem2.setText("Gestionar aplicaciones");
+        jMenu4.add(jMenuItem2);
+
+        jMenu2.add(jMenu4);
 
         jMenuItem3.setText("Gestionar secciones");
         jMenu2.add(jMenuItem3);
@@ -272,10 +283,6 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
     private void jMenuItem4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem4MouseClicked
 
     }//GEN-LAST:event_jMenuItem4MouseClicked
@@ -287,6 +294,10 @@ public class Main extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         cu.openUrl("http://www.facebook.com");
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -335,6 +346,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
@@ -342,11 +354,12 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollBar jScrollBar1;
-    private javax.swing.JScrollBar jScrollBar2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;

@@ -14,18 +14,22 @@ import java.awt.Toolkit;
  */
 public class DimensionController {
     
-    private final Dimension tam = Toolkit.getDefaultToolkit().getScreenSize();
+    private final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public double getScreenWidth(){
-        return this.tam.getWidth();
+        return this.dim.getWidth();
     }
     
     public double getScreenHeight(){
-        return this.tam.getHeight();
+        return this.dim.getHeight();
     }
            
     public double getMainWidth(){
-        return this.getScreenWidth() * 0.4;
+        // Si hay mas de un monitor, entraremos en el primer if.
+        if (getScreenWidth() > (getScreenHeight() * 2))
+            return this.getScreenWidth() * 0.4;
+        else
+            return this.getScreenWidth() * 0.8;
     }
     
     public double getMainHeight(){
