@@ -6,6 +6,8 @@
 package omni.visual;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import omni.controller.APPController;
 import omni.controller.URLController;
@@ -37,7 +39,16 @@ public class Main extends javax.swing.JFrame {
         this.jPanel2.setBackground(new Color(43, 146, 198));
         this.jPanel3.setBackground(new Color(43, 146, 198));
         
-        
+        this.itemGestionApp.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                GestionApp gestionAccesos = new GestionApp();
+                gestionAccesos.setVisible(true);
+                gestionAccesos.requestFocus();
+            }
+            
+        });
     }
 
     
@@ -64,18 +75,18 @@ public class Main extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        menuInicio = new javax.swing.JMenu();
+        itemSalir = new javax.swing.JMenuItem();
+        menuCuenta = new javax.swing.JMenu();
+        subMenuGestionAccesos = new javax.swing.JMenu();
+        itemGestionWeb = new javax.swing.JMenuItem();
+        itemGestionApp = new javax.swing.JMenuItem();
+        itemGestionSecciones = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        itemGestionPerfil = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        itemCerrarSesion = new javax.swing.JMenuItem();
+        menuAyuda = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuItem7 = new javax.swing.JMenuItem();
@@ -196,58 +207,58 @@ public class Main extends javax.swing.JFrame {
             .addComponent(jTabbedPane1)
         );
 
-        jMenu1.setText("Inicio");
+        menuInicio.setText("Inicio");
 
-        jMenuItem1.setText("Salir");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        itemSalir.setText("Salir");
+        itemSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                itemSalirActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        menuInicio.add(itemSalir);
 
-        menuBar.add(jMenu1);
+        menuBar.add(menuInicio);
 
-        jMenu2.setText("Cuenta");
+        menuCuenta.setText("Cuenta");
 
-        jMenu4.setText("Gestionar accesos");
+        subMenuGestionAccesos.setText("Gestionar accesos");
 
-        jMenuItem8.setText("Gestionar webs");
-        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+        itemGestionWeb.setText("Gestionar webs");
+        itemGestionWeb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem8ActionPerformed(evt);
+                itemGestionWebActionPerformed(evt);
             }
         });
-        jMenu4.add(jMenuItem8);
+        subMenuGestionAccesos.add(itemGestionWeb);
 
-        jMenuItem2.setText("Gestionar aplicaciones");
-        jMenu4.add(jMenuItem2);
+        itemGestionApp.setText("Gestionar aplicaciones");
+        subMenuGestionAccesos.add(itemGestionApp);
 
-        jMenu2.add(jMenu4);
+        menuCuenta.add(subMenuGestionAccesos);
 
-        jMenuItem3.setText("Gestionar secciones");
-        jMenu2.add(jMenuItem3);
-        jMenu2.add(jSeparator1);
+        itemGestionSecciones.setText("Gestionar secciones");
+        menuCuenta.add(itemGestionSecciones);
+        menuCuenta.add(jSeparator1);
 
-        jMenuItem5.setText("Ver perfil");
-        jMenu2.add(jMenuItem5);
-        jMenu2.add(jSeparator2);
+        itemGestionPerfil.setText("Ver perfil");
+        menuCuenta.add(itemGestionPerfil);
+        menuCuenta.add(jSeparator2);
 
-        jMenuItem4.setText("Cerrar sesión");
-        jMenuItem4.addMouseListener(new java.awt.event.MouseAdapter() {
+        itemCerrarSesion.setText("Cerrar sesión");
+        itemCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenuItem4MouseClicked(evt);
+                itemCerrarSesionMouseClicked(evt);
             }
         });
-        jMenu2.add(jMenuItem4);
+        menuCuenta.add(itemCerrarSesion);
 
-        menuBar.add(jMenu2);
+        menuBar.add(menuCuenta);
 
-        jMenu3.setText("Ayuda");
+        menuAyuda.setText("Ayuda");
 
         jMenuItem6.setText("Guía rápida");
-        jMenu3.add(jMenuItem6);
-        jMenu3.add(jSeparator3);
+        menuAyuda.add(jMenuItem6);
+        menuAyuda.add(jSeparator3);
 
         jMenuItem7.setText("Sobre nosotros");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
@@ -255,9 +266,9 @@ public class Main extends javax.swing.JFrame {
                 jMenuItem7ActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem7);
+        menuAyuda.add(jMenuItem7);
 
-        menuBar.add(jMenu3);
+        menuBar.add(menuAyuda);
 
         setJMenuBar(menuBar);
 
@@ -275,17 +286,17 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void itemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSalirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_itemSalirActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
-    private void jMenuItem4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem4MouseClicked
+    private void itemCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemCerrarSesionMouseClicked
 
-    }//GEN-LAST:event_jMenuItem4MouseClicked
+    }//GEN-LAST:event_itemCerrarSesionMouseClicked
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         APPController.openApp("C:/Program Files (x86)/Steam/Steam.exe");
@@ -295,9 +306,9 @@ public class Main extends javax.swing.JFrame {
         cu.openUrl("http://www.facebook.com");
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+    private void itemGestionWebActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGestionWebActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem8ActionPerformed
+    }//GEN-LAST:event_itemGestionWebActionPerformed
 
     /**
      * @param args the command line arguments
@@ -336,6 +347,12 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem itemCerrarSesion;
+    private javax.swing.JMenuItem itemGestionApp;
+    private javax.swing.JMenuItem itemGestionPerfil;
+    private javax.swing.JMenuItem itemGestionSecciones;
+    private javax.swing.JMenuItem itemGestionWeb;
+    private javax.swing.JMenuItem itemSalir;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -343,18 +360,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -364,6 +371,10 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JMenu menuAyuda;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu menuCuenta;
+    private javax.swing.JMenu menuInicio;
+    private javax.swing.JMenu subMenuGestionAccesos;
     // End of variables declaration//GEN-END:variables
 }

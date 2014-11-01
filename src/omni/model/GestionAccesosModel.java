@@ -7,7 +7,6 @@ package omni.model;
 
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
@@ -69,19 +68,12 @@ public class GestionAccesosModel  extends AbstractTableModel {
         fireTableDataChanged();
     }
     
-    public void addRow(){
+    public void addRow(String name, String appPath, String imagePath){
         Object[] info = new Object[3];
-        JFileChooser jf = new JFileChooser();
         
-        info[0] = JOptionPane.showInputDialog(null, "Introduce nombre de la aplicación", "Selecciona nombre", 
-                JOptionPane.QUESTION_MESSAGE);
-        
-        jf.showOpenDialog(null);
-        info[1] = jf.getSelectedFile().getPath();
-        
-        jf.showOpenDialog(null);
-
-        info[2] = jf.getSelectedFile().getPath();
+        info[0] = name;      
+        info[1] = appPath;
+        info[2] = imagePath;
         
         datos.add(info);
         fireTableDataChanged();

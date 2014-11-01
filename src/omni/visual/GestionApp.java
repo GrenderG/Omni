@@ -15,13 +15,17 @@ import omni.model.GestionAccesosModel;
  *
  * @author campus
  */
-public class GestionAccesos extends javax.swing.JFrame {
+public class GestionApp extends javax.swing.JFrame {
 
     /**
      * Creates new form GestionAccesos
      */
-    public GestionAccesos() {
+    public GestionApp() {
         initComponents();
+        
+        this.setLocationRelativeTo(null);
+        
+        this.setTitle("Omni | Gestionar aplicaciones");
         
         this.jTable1.setModel(new GestionAccesosModel());
         this.jPanel1.setBackground(new Color(202, 238, 255));
@@ -31,9 +35,10 @@ public class GestionAccesos extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                GestionAccesosModel GAmodel = ((GestionAccesosModel) jTable1.getModel());
-                    
-                GAmodel.addRow();
+                AddApp addAcceso = new AddApp();
+                addAcceso.setVisible(true);
+                addAcceso.requestFocus();
+                
             
             }
             
@@ -57,7 +62,7 @@ public class GestionAccesos extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -153,20 +158,21 @@ public class GestionAccesos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GestionAccesos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GestionAccesos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GestionAccesos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GestionAccesos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GestionAccesos().setVisible(true);
+                new GestionApp().setVisible(true);
             }
         });
     }
