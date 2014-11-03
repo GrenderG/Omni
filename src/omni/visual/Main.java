@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import omni.controller.APPController;
+import omni.controller.ButtonHandler;
 import omni.controller.URLController;
 import omni.controller.DimensionController;
 
@@ -39,6 +40,12 @@ public class Main extends javax.swing.JFrame {
         this.jPanel2.setBackground(new Color(43, 146, 198));
         this.jPanel3.setBackground(new Color(43, 146, 198));
         
+        this.jPanel2.add(new ButtonHandler("Facebook", this.getWidth(), this.getHeight()));
+        this.jPanel2.add(new ButtonHandler("Facebook", this.getWidth(), this.getHeight()));
+        this.jPanel2.add(new ButtonHandler("Facebook", this.getWidth(), this.getHeight()));
+        this.jPanel2.add(new ButtonHandler("Facebook", this.getWidth(), this.getHeight()));
+        this.jPanel2.add(new ButtonHandler("Facebook", this.getWidth(), this.getHeight()));
+        
         this.itemGestionApp.addActionListener(new ActionListener(){
 
             @Override
@@ -65,10 +72,6 @@ public class Main extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
         jButton6 = new javax.swing.JButton();
@@ -102,50 +105,15 @@ public class Main extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel2.setAutoscrolls(true);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/instagram.png"))); // NOI18N
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/anyadir_acceso.png"))); // NOI18N
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/facebook.png"))); // NOI18N
-        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/twitter.png"))); // NOI18N
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(95, 95, 95)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(68, 68, 68)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(37, Short.MAX_VALUE))
+            .addGap(0, 1164, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(56, 56, 56)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(349, Short.MAX_VALUE))
+            .addGap(0, 769, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(jPanel2);
@@ -302,10 +270,6 @@ public class Main extends javax.swing.JFrame {
         APPController.openApp("C:/Program Files (x86)/Steam/Steam.exe");
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        cu.openUrl("http://www.facebook.com");
-    }//GEN-LAST:event_jButton4ActionPerformed
-
     private void itemGestionWebActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGestionWebActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_itemGestionWebActionPerformed
@@ -353,10 +317,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem itemGestionSecciones;
     private javax.swing.JMenuItem itemGestionWeb;
     private javax.swing.JMenuItem itemSalir;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
