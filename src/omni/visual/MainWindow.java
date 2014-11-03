@@ -19,20 +19,21 @@ import omni.controller.DimensionController;
  *
  * @author Grender
  */
-public class Main extends javax.swing.JFrame {
+public class MainWindow extends javax.swing.JFrame {
 
-    private static final ImageIcon icon = new ImageIcon(Main.class.getResource("/res/icon.png"));
+    private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
     private final DimensionController cd = new DimensionController();
     private final APPController capp = new APPController();
     private final URLController cu = new URLController();
+    public static MainWindow mw;
     
-    public Main() {
+    public MainWindow() {
         initComponents();
-
+        
         this.setSize((int)(cd.getMainWidth()), (int)(cd.getMainHeight()));
-        
+
         this.setTitle("Omni");
-        
+       
         this.setLocationRelativeTo(null);
         this.setIconImage(icon.getImage());
         
@@ -40,12 +41,15 @@ public class Main extends javax.swing.JFrame {
         this.jPanel2.setBackground(new Color(43, 146, 198));
         this.jPanel3.setBackground(new Color(43, 146, 198));
         
-        this.jPanel2.add(new ButtonHandler("Facebook", this.getWidth(), this.getHeight()));
-        this.jPanel2.add(new ButtonHandler("Facebook", this.getWidth(), this.getHeight()));
-        this.jPanel2.add(new ButtonHandler("Facebook", this.getWidth(), this.getHeight()));
-        this.jPanel2.add(new ButtonHandler("Facebook", this.getWidth(), this.getHeight()));
-        this.jPanel2.add(new ButtonHandler("Facebook", this.getWidth(), this.getHeight()));
-        
+        /*
+        this.jPanel2.add(new ButtonHandler("Facebook"));
+        this.jPanel2.add(new ButtonHandler("Facebook"));
+        this.jPanel2.add(new ButtonHandler("Facebook"));
+        this.jPanel2.add(new ButtonHandler("Facebook"));
+        this.jPanel2.add(new ButtonHandler("Facebook"));
+        this.jPanel2.add(new ButtonHandler("Facebook"));
+        */
+
         this.itemGestionApp.addActionListener(new ActionListener(){
 
             @Override
@@ -56,8 +60,32 @@ public class Main extends javax.swing.JFrame {
             }
             
         });
-    }
+        
+        this.itemGestionWeb.addActionListener(new ActionListener(){
 
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                GestionWeb gestionWeb = new GestionWeb();
+                gestionWeb.setVisible(true);
+                gestionWeb.requestFocus();
+            }
+            
+        });
+        
+        this.itemSalir.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                System.exit(0);
+            }
+            
+        });
+        
+    }
+    
+    public void setButtonToJPanel(String buttonName){
+        this.jPanel2.add(new ButtonHandler(buttonName));
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -84,7 +112,6 @@ public class Main extends javax.swing.JFrame {
         subMenuGestionAccesos = new javax.swing.JMenu();
         itemGestionWeb = new javax.swing.JMenuItem();
         itemGestionApp = new javax.swing.JMenuItem();
-        itemGestionSecciones = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         itemGestionPerfil = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
@@ -100,10 +127,14 @@ public class Main extends javax.swing.JFrame {
 
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        jTabbedPane1.setMaximumSize(null);
         jTabbedPane1.setName(""); // NOI18N
+
+        jScrollPane1.setMaximumSize(null);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel2.setAutoscrolls(true);
+        jPanel2.setMaximumSize(null);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -172,7 +203,7 @@ public class Main extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         menuInicio.setText("Inicio");
@@ -203,9 +234,6 @@ public class Main extends javax.swing.JFrame {
         subMenuGestionAccesos.add(itemGestionApp);
 
         menuCuenta.add(subMenuGestionAccesos);
-
-        itemGestionSecciones.setText("Gestionar secciones");
-        menuCuenta.add(itemGestionSecciones);
         menuCuenta.add(jSeparator1);
 
         itemGestionPerfil.setText("Ver perfil");
@@ -291,21 +319,25 @@ public class Main extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new Main().setVisible(true);
+                mw = new MainWindow();
+                mw.setVisible(true);
             }
         });
     }
@@ -314,7 +346,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem itemCerrarSesion;
     private javax.swing.JMenuItem itemGestionApp;
     private javax.swing.JMenuItem itemGestionPerfil;
-    private javax.swing.JMenuItem itemGestionSecciones;
     private javax.swing.JMenuItem itemGestionWeb;
     private javax.swing.JMenuItem itemSalir;
     private javax.swing.JButton jButton6;

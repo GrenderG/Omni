@@ -27,13 +27,13 @@ public class DimensionController {
     public double getMainWidth(){
         // Si hay mas de un monitor, entraremos en el primer if.
         if (getScreenWidth() > (getScreenHeight() * 2))
-            return this.getScreenWidth() * 0.4;
+            return this.getScreenWidth() * 0.3;
         else
-            return this.getScreenWidth() * 0.8;
+            return this.getScreenWidth() * 0.6;
     }
     
     public double getMainHeight(){
-        return this.getScreenHeight() * 0.8;
+        return this.getScreenHeight() * 0.6;
     }
     
 }

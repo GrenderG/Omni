@@ -15,41 +15,25 @@ import javax.swing.JFileChooser;
  *
  * @author campus
  */
-public class AddApp extends javax.swing.JFrame {
+public class AddWeb extends javax.swing.JFrame {
     
     private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
     
     /**
      * Creates new form AddAcceso
      */
-    public AddApp() {
+    public AddWeb() {
         initComponents();
         
         this.setIconImage(icon.getImage());
         
         this.setLocationRelativeTo(null);
-        this.setTitle("Omni | Añadir aplicación");
+        this.setTitle("Omni | Añadir web");
         this.jPanel1.setBackground(new Color(202, 238, 255));
 
         this.showImagePanel.setBackground(Color.LIGHT_GRAY);
 
-        this.textAppPath.setEditable(false);
         this.textImagePath.setEditable(false);
-
-        this.botonRutaApp.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-
-                JFileChooser jf = new JFileChooser();
-
-                if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    AddApp.this.textAppPath.setText(jf.getSelectedFile().getPath());
-                }
-
-            }
-
-        });
 
         this.botonImagenApp.addActionListener(new ActionListener() {
 
@@ -60,10 +44,10 @@ public class AddApp extends javax.swing.JFrame {
                 jf.showOpenDialog(null);
 
                 if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    AddApp.this.textImagePath.setText(jf.getSelectedFile().getPath());
-                    AddApp.this.showImagePanel.add(
+                    AddWeb.this.textImagePath.setText(jf.getSelectedFile().getPath());
+                    AddWeb.this.showImagePanel.add(
                             new Image(300, 150, jf.getSelectedFile().getPath()));
-                    AddApp.this.showImagePanel.repaint();
+                    AddWeb.this.showImagePanel.repaint();
                 }
             }
 
@@ -74,8 +58,8 @@ public class AddApp extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 
-                MainWindow.mw.setButtonToJPanel(AddApp.this.textNamePath.getText());
-                AddApp.this.dispose();
+                MainWindow.mw.setButtonToJPanel(AddWeb.this.textNamePath.getText());
+                AddWeb.this.dispose();
                 
             }
 
@@ -87,7 +71,7 @@ public class AddApp extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
 
-                AddApp.this.dispose();
+                AddWeb.this.dispose();
 
             }
 
@@ -112,9 +96,8 @@ public class AddApp extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         textNamePath = new javax.swing.JTextField();
-        textAppPath = new javax.swing.JTextField();
+        textURL = new javax.swing.JTextField();
         textImagePath = new javax.swing.JTextField();
-        botonRutaApp = new javax.swing.JButton();
         botonImagenApp = new javax.swing.JButton();
         showImagePanel = new javax.swing.JPanel();
         botonAnyadir = new javax.swing.JButton();
@@ -125,18 +108,11 @@ public class AddApp extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jLabel1.setText("Nombre aplicación");
+        jLabel1.setText("Nombre web");
 
-        jLabel2.setText("Ruta aplicación");
+        jLabel2.setText("Ruta web");
 
-        jLabel3.setText("Imagen aplicación");
-
-        botonRutaApp.setText("...");
-        botonRutaApp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonRutaAppActionPerformed(evt);
-            }
-        });
+        jLabel3.setText("Imagen web");
 
         botonImagenApp.setText("...");
         botonImagenApp.addActionListener(new java.awt.event.ActionListener() {
@@ -177,14 +153,11 @@ public class AddApp extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(textAppPath)
-                                    .addComponent(textImagePath, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))
+                                .addComponent(textImagePath, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(botonRutaApp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(botonImagenApp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(textNamePath)))
+                                .addComponent(botonImagenApp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(textNamePath)
+                            .addComponent(textURL)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(botonAnyadir, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
@@ -205,8 +178,7 @@ public class AddApp extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(textAppPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonRutaApp))
+                    .addComponent(textURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -235,10 +207,6 @@ public class AddApp extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void botonRutaAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRutaAppActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botonRutaAppActionPerformed
-
     private void botonImagenAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonImagenAppActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_botonImagenAppActionPerformed
@@ -260,18 +228,14 @@ public class AddApp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddWeb.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddWeb.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddWeb.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddWeb.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -280,7 +244,7 @@ public class AddApp extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddApp().setVisible(true);
+                new AddWeb().setVisible(true);
             }
         });
     }
@@ -288,15 +252,14 @@ public class AddApp extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAnyadir;
     private javax.swing.JButton botonImagenApp;
-    private javax.swing.JButton botonRutaApp;
     private javax.swing.JButton botonVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel showImagePanel;
-    private javax.swing.JTextField textAppPath;
     private javax.swing.JTextField textImagePath;
     private javax.swing.JTextField textNamePath;
+    private javax.swing.JTextField textURL;
     // End of variables declaration//GEN-END:variables
 }

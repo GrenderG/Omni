@@ -14,7 +14,7 @@ import javax.swing.JButton;
  */
 public class ButtonHandler extends JButton{
     
-    private final int panelWidth;
+    
     
     private final int XSpace;
     private final int YSpace;
@@ -23,12 +23,12 @@ public class ButtonHandler extends JButton{
     private static int rowCount = 1;
     private static int columnCount = 1;
     
-    public ButtonHandler(String info, int width, int height){
-        this.panelWidth = width;
-        this.XSpace = panelWidth / 8;
+    public ButtonHandler(String info){
+        
+        this.XSpace = buttonSize+64;
         this.YSpace = XSpace;
         this.setSize(buttonSize, buttonSize);
-        this.setLocation(columnCount * XSpace+(int)panelWidth/10, rowCount * YSpace);
+        this.setLocation(columnCount * XSpace, rowCount * YSpace);
             
         if (info.contains("/res/"))
             this.setIcon(new ImageIcon(info));
@@ -43,5 +43,7 @@ public class ButtonHandler extends JButton{
         }
         
     }
+
+    
         
 }

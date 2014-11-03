@@ -15,10 +15,10 @@ import javax.swing.ImageIcon;
  */
 public class Image extends javax.swing.JPanel {
         
-        private int width;
-        private int height;
+        private final int width;
+        private final int height;
         
-        private String path;
+        private final String path;
     
         public Image(int width, int height, String path) {
             this.setSize(width, height);

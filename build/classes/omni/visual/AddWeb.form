@@ -58,17 +58,12 @@
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="textAppPath" max="32767" attributes="0"/>
-                                      <Component id="textImagePath" pref="167" max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="textImagePath" pref="167" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="botonRutaApp" alignment="1" min="-2" pref="25" max="-2" attributes="0"/>
-                                      <Component id="botonImagenApp" alignment="1" min="-2" pref="25" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="botonImagenApp" min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
                               <Component id="textNamePath" max="32767" attributes="0"/>
+                              <Component id="textURL" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -97,8 +92,7 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="textAppPath" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="botonRutaApp" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="textURL" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -121,32 +115,24 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Nombre aplicaci&#xf3;n"/>
+            <Property name="text" type="java.lang.String" value="Nombre web"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Ruta aplicaci&#xf3;n"/>
+            <Property name="text" type="java.lang.String" value="Ruta web"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Imagen aplicaci&#xf3;n"/>
+            <Property name="text" type="java.lang.String" value="Imagen web"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="textNamePath">
         </Component>
-        <Component class="javax.swing.JTextField" name="textAppPath">
+        <Component class="javax.swing.JTextField" name="textURL">
         </Component>
         <Component class="javax.swing.JTextField" name="textImagePath">
-        </Component>
-        <Component class="javax.swing.JButton" name="botonRutaApp">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="..."/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonRutaAppActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="botonImagenApp">
           <Properties>

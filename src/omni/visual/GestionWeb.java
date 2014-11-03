@@ -9,29 +9,29 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
-import omni.model.GestionAccesosModel;
+import omni.model.GestionWebModel;
 
 /**
  *
  * @author campus
  */
-public class GestionApp extends javax.swing.JFrame {
+public class GestionWeb extends javax.swing.JFrame {
     
     private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
     
     /**
      * Creates new form GestionAccesos
      */
-    public GestionApp() {
+    public GestionWeb() {
         initComponents();
         
         this.setIconImage(icon.getImage());
         
         this.setLocationRelativeTo(null);
         
-        this.setTitle("Omni | Gestionar aplicaciones");
+        this.setTitle("Omni | Gestionar webs");
         
-        this.jTable1.setModel(new GestionAccesosModel());
+        this.jTable1.setModel(new GestionWebModel());
         this.jPanel1.setBackground(new Color(202, 238, 255));
         this.jPanel2.setBackground(new Color(202, 238, 255));
         
@@ -39,9 +39,9 @@ public class GestionApp extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddApp addAcceso = new AddApp();
-                addAcceso.setVisible(true);
-                addAcceso.requestFocus();
+                AddWeb addWeb = new AddWeb();
+                addWeb.setVisible(true);
+                addWeb.requestFocus();
                 
             
             }
@@ -83,11 +83,11 @@ public class GestionApp extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jButton2.setText("Añadir acceso");
+        jButton2.setText("Añadir web");
 
-        jButton3.setText("Eliminar acceso");
+        jButton3.setText("Eliminar web");
 
-        jButton1.setText("Modificar acceso");
+        jButton1.setText("Modificar web");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -162,21 +162,23 @@ public class GestionApp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GestionApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionWeb.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GestionApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionWeb.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GestionApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionWeb.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GestionApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionWeb.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GestionApp().setVisible(true);
+                new GestionWeb().setVisible(true);
             }
         });
     }
