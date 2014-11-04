@@ -8,6 +8,8 @@ package omni.visual;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -16,6 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import omni.controller.URLController;
 import omni.model.GestionWebModel;
 
 /**
@@ -27,12 +31,17 @@ public class MainWindow extends javax.swing.JFrame {
      private static final ImageIcon icon = new ImageIcon(Login.class.getResource("/res/icon.png"));
      private JFileChooser jf = new JFileChooser();
      
-     private String imagePath;
+     private final GestionWebModel webModel;
+     
+     private static boolean isImageEnabled = false;
+     private static int lastRowSelected;
+     private static boolean isModifying = false;
      
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
+        
         initComponents();
         
         this.setIconImage(icon.getImage());
@@ -42,37 +51,171 @@ public class MainWindow extends javax.swing.JFrame {
         
         this.jTable1.setModel(new GestionWebModel());
         
+        this.webModel = ((GestionWebModel)MainWindow.this.jTable1.getModel());
+        
         this.jPanel1.setBackground(new Color(202, 238, 255));
         this.jPanel2.setBackground(new Color(202, 238, 255));
         this.jPanel3.setBackground(new Color(202, 238, 255));
         this.jPanel4.setBackground(new Color(202, 238, 255));
         this.jPanel5.setBackground(new Color(202, 238, 255));
         
-        this.jPanel6.setBackground(Color.white);
+        this.jPanel6.setBackground(new Color(235, 248, 255));
         
-        this.jLabel6.addMouseListener(new MouseListener(){
+        this.jTextField1.setEditable(false);
+        this.jTextField2.setEditable(false);
+        this.jButton5.setEnabled(false);
+        this.jButton6.setEnabled(false);
+        this.jPanel6.setEnabled(false);
+        
+        this.jTable1.addMouseListener(new MouseListener(){
 
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent me) {
 
-                if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                jTextField1.setText((String) webModel.getValueAt(jTable1.getSelectedRow(), 0));
+                jTextField2.setText((String) webModel.getValueAt(jTable1.getSelectedRow(), 1));
+
+                File rutaAbs = new File((String) webModel.getValueAt(jTable1.getSelectedRow(), 2));
+
+                rutaAbs = rutaAbs.getAbsoluteFile();
+
+                try {
+                    jLabel6.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent me) {
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent me) {
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent me) {
+                
+            }
+
+            @Override
+            public void mouseExited(MouseEvent me) {
+                
+            }
+            
+        });
+        
+        this.jButton1.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+                jTextField1.setText("");
+                jTextField2.setText("");
+                jLabel6.setIcon(null);
+                
+                jTextField1.setEditable(true);
+                jTextField2.setEditable(true);
+                jPanel6.setEnabled(true);
+                jButton5.setEnabled(true);
+                jButton6.setEnabled(true);
+                isImageEnabled = true;
+                
+                jButton1.setEnabled(false);
+                jButton2.setEnabled(false);
+                jButton3.setEnabled(false);
+                jButton4.setEnabled(false);
+                jTable1.setEnabled(false);
+                jTabbedPane1.setEnabled(false);
+                
+            }
+            
+        });
+        
+        this.jButton4.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+                if (jTable1.getSelectedRow() != -1){
                     
-                    File rutaAbs = jf.getSelectedFile().getAbsoluteFile();
+                    if (JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar "
+                            +webModel.getValueAt(jTable1.getSelectedRow(), 0)+"?", 
+                            "Eliminar", JOptionPane.YES_NO_OPTION) == 0){
                     
-                    try {
+                        webModel.removeRow(jTable1.getSelectedRow());
 
-                        jLabel6.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
+                        jTextField1.setText("");
+                        jTextField2.setText("");
+                        jLabel6.setIcon(null);
+                        jTable1.clearSelection();
 
-                    } catch (MalformedURLException ex) {
-                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        jTextField1.setEditable(false);
+                        jTextField2.setEditable(false);
+                        jPanel6.setEnabled(false);
+                        jButton5.setEnabled(false);
+                        jButton6.setEnabled(false);
+                        isImageEnabled = false;
                     }
-                    
-                    /*
-                    //String caracter = Matcher.quoteReplacement("\\");
-                    String prueba = Pattern.compile("\\").matcher(imagePath).replaceAll("\\");
-                    System.out.println(prueba);
-                    */
-                    //MainWindow.this.jPanel6.add(new Image(128, 128, imagePath));
+                }else{
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
+                    "Error al eliminar", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            
+        });
+        
+        this.jButton6.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                jTextField1.setText("");
+                jTextField2.setText("");
+                jLabel6.setIcon(null);
+                jTable1.clearSelection();
+                
+                jTextField1.setEditable(false);
+                jTextField2.setEditable(false);
+                jPanel6.setEnabled(false);
+                jButton5.setEnabled(false);
+                jButton6.setEnabled(false);
+                isImageEnabled = false;
+                
+                jButton1.setEnabled(true);
+                jButton2.setEnabled(true);
+                jButton3.setEnabled(true);
+                jButton4.setEnabled(true);
+                jTable1.setEnabled(true);
+                jTabbedPane1.setEnabled(true);
+                
+                isModifying = false;
+            }
+            
+        });
+        
+        this.jPanel6.addMouseListener(new MouseListener(){
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                
+                if (isImageEnabled){
+                    if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+                        File rutaAbs = jf.getSelectedFile().getAbsoluteFile();
+
+                        try {
+
+                            jLabel6.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
+
+                        } catch (MalformedURLException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
                 }
             }
 
@@ -88,14 +231,125 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-               
+                if (isImageEnabled)
+                    MainWindow.this.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                
+                if (isImageEnabled)
+                    MainWindow.this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
             
+        });
+        
+        this.jButton2.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+                if (jTable1.getSelectedRow() != -1){
+                
+                URLController.openUrl((String) webModel.getValueAt(jTable1.getSelectedRow(), 1));
+                
+                }else{
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
+                    "Error al iniciar", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            
+        });
+        
+        this.jButton3.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {               
+                
+                if (jTable1.getSelectedRow() != -1){
+                    
+                    jPanel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                    
+                    jTextField1.setEditable(true);
+                    jTextField2.setEditable(true);
+                    jPanel6.setEnabled(true);
+                    jButton5.setEnabled(true);
+                    jButton6.setEnabled(true);
+                    isImageEnabled = true;
+                    
+                    jButton1.setEnabled(false);
+                    jButton2.setEnabled(false);
+                    jButton3.setEnabled(false);
+                    jButton4.setEnabled(false);
+                    lastRowSelected = jTable1.getSelectedRow();
+                    jTable1.setEnabled(false);
+                    jTabbedPane1.setEnabled(false);
+                    
+                    jTextField1.setText((String) webModel.getValueAt(jTable1.getSelectedRow(), 0));
+                    jTextField2.setText((String) webModel.getValueAt(jTable1.getSelectedRow(), 1));
+
+                    File rutaAbs = new File((String) webModel.getValueAt(jTable1.getSelectedRow(), 2));
+
+                    rutaAbs = rutaAbs.getAbsoluteFile();
+
+                    try {
+                        jLabel6.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    isModifying = true;
+                    
+                }else{
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
+                    "Error al modificar", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
+        this.jButton5.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+                if (!jTextField2.getText().equals("") 
+                        && !jTextField1.getText().equals("")
+                        && jLabel6.getIcon() != null){
+                
+                    jTextField1.setEditable(false);
+                    jTextField2.setEditable(false);
+                    jPanel6.setEnabled(false);
+                    jButton5.setEnabled(false);
+                    jButton6.setEnabled(false);
+                    isImageEnabled = false;
+
+                    if (!jTextField2.getText().contains("://"))
+                        jTextField2.setText("http://"+jTextField2.getText());
+                    
+                    if (isModifying)
+                        webModel.removeRow(lastRowSelected);
+                    
+                    webModel.addRow(jTextField1.getText(), jTextField2.getText(), 
+                            jLabel6.getIcon().toString().substring(5, jLabel6.getIcon().toString().length()));
+                    
+                    jButton1.setEnabled(true);
+                    jButton2.setEnabled(true);
+                    jButton3.setEnabled(true);
+                    jButton4.setEnabled(true);
+                    jTable1.setEnabled(true);
+                    jTabbedPane1.setEnabled(true);
+                    
+                    jTextField1.setText("");
+                    jTextField2.setText("");
+                    jLabel6.setIcon(null);
+                    jTable1.clearSelection();
+                    
+                    isModifying = false;
+                    
+                }else{
+                    JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos.",
+                        "Imposible añadir web", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
     }
 
@@ -125,6 +379,8 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
@@ -163,19 +419,19 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 146, Short.MAX_VALUE)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton3)
                     .addComponent(jButton4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                 .addComponent(jButton2)
                 .addContainerGap())
         );
@@ -200,56 +456,86 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 128, Short.MAX_VALUE)
+            .addGap(0, 126, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 128, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
+
+        jButton5.setText("Aceptar");
+        jButton5.setAlignmentY(0.0F);
+
+        jButton6.setText("Cancelar");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(54, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49))
+                    .addComponent(jTextField2)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(64, 64, 64)
+                .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(116, 116, 116))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6))
+                .addContainerGap())
         );
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jTable1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jTable1.setBorder(null);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -390,6 +676,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

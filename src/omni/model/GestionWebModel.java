@@ -6,8 +6,6 @@
 package omni.model;
 
 import java.util.ArrayList;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -15,16 +13,15 @@ import javax.swing.table.AbstractTableModel;
  * @author campus
  */
 public class GestionWebModel  extends AbstractTableModel {
+   
     ArrayList<Object[]> datos = new ArrayList<>();
     String [] columns = {"Nombre", "URL", "Imagen"};
     
     Class[] types = new Class[] {java.lang.String.class, java.lang.String.class, 
             java.lang.Integer.class};
     
-    public GestionWebModel(){
-        Object[] row = new Object[3];
-        
-        this.datos.add(row);
+    public GestionWebModel(){       
+
     }
     
     public GestionWebModel (String[] info){
@@ -68,11 +65,11 @@ public class GestionWebModel  extends AbstractTableModel {
         fireTableDataChanged();
     }
     
-    public void addRow(String name, String appPath, String imagePath){
+    public void addRow(String name, String webURL, String imagePath){
         Object[] info = new Object[3];
         
         info[0] = name;      
-        info[1] = appPath;
+        info[1] = webURL;
         info[2] = imagePath;
         
         datos.add(info);

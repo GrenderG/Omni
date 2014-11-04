@@ -9,6 +9,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,9 +24,11 @@ public class URLController {
             Desktop.getDesktop().browse(new URI(url));
             
         } catch (IOException ex) {
-            System.out.println("Imposible abrir el navegador.");
+            JOptionPane.showMessageDialog(null, "Imposible abrir la URL, asegúrate de que está bien escrita.", 
+                    "Error al intentar abrir", JOptionPane.ERROR_MESSAGE);
         } catch (URISyntaxException ex) {
-            System.out.println("Imposible abrir la URL, asegúrate de que está bien escrita.");
+            JOptionPane.showMessageDialog(null, "Imposible abrir la URL, asegúrate de que está bien escrita.",
+                    "Error al intentar abrir", JOptionPane.ERROR_MESSAGE);
         }
     }
     

@@ -6,8 +6,6 @@
 package omni.model;
 
 import java.util.ArrayList;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -22,9 +20,7 @@ public class GestionAccesosModel  extends AbstractTableModel {
             java.lang.Integer.class};
     
     public GestionAccesosModel(){
-        Object[] row = new Object[3];
         
-        this.datos.add(row);
     }
     
     public GestionAccesosModel (String[] info){
