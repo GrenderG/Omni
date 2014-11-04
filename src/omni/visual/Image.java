@@ -7,6 +7,7 @@ package omni.visual;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.net.URL;
 import javax.swing.ImageIcon;
 
 /**
@@ -18,20 +19,20 @@ public class Image extends javax.swing.JPanel {
         private final int width;
         private final int height;
         
-        private final String path;
+        private final URL url;
     
-        public Image(int width, int height, String path) {
+        public Image(int width, int height, URL url) {
             this.setSize(width, height);
             this.width = width;
             this.height = height;
-            this.path = path;
+            this.url = url;
         }
 
         @Override
         public void paint(Graphics grafico) {
             Dimension size = getSize();
-
-            ImageIcon Img = new ImageIcon(getClass().getResource(path));
+            grafico = grafico.create();
+            ImageIcon Img = new ImageIcon(url);
 
             grafico.drawImage(Img.getImage(), 0, 0, size.width, size.height, null);
 

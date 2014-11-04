@@ -8,6 +8,10 @@ package omni.visual;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -29,7 +33,13 @@ public class Login extends javax.swing.JFrame {
         this.jPanel1.setBackground(new Color(202, 238, 255));
         this.jPanel2.setBackground(new Color(202, 238, 255));
         
-        this.jPanel1.add(new Image(400, 300, "/res/background.png"));
+        
+        
+        try {
+            this.jPanel1.add(new Image(400, 300, new URL("/res/background.png")));
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.jPanel1.repaint();
         
         this.jLabel3.addMouseListener(new MouseListener(){
