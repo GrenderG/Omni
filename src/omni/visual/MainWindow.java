@@ -173,7 +173,7 @@ public class MainWindow extends javax.swing.JFrame {
                             "Eliminar", JOptionPane.YES_NO_OPTION) == 0){
                     
                         webModel.removeRow(jTable1.getSelectedRow());
-
+                        
                         jTextField1.setText("");
                         jTextField2.setText("");
                         jLabel6.setIcon(null);
@@ -184,6 +184,7 @@ public class MainWindow extends javax.swing.JFrame {
                         jPanel6.setEnabled(false);
                         jButton5.setEnabled(false);
                         jButton6.setEnabled(false);
+                        jButton8.setEnabled(false);
                         isImageEnabled = false;
                     }
                 }else{
@@ -208,6 +209,7 @@ public class MainWindow extends javax.swing.JFrame {
                 jPanel6.setEnabled(false);
                 jButton5.setEnabled(false);
                 jButton6.setEnabled(false);
+                jButton8.setEnabled(false);
                 isImageEnabled = false;
                 
                 jButton1.setEnabled(true);
@@ -564,9 +566,9 @@ public class MainWindow extends javax.swing.JFrame {
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(26, 26, 26)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
