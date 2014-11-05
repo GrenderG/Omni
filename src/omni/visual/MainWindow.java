@@ -7,6 +7,7 @@
 package omni.visual;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -18,6 +19,9 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import omni.controller.ClipboardController;
+import omni.controller.OSController;
 import omni.controller.URLController;
 import omni.model.GestionWebModel;
 
@@ -35,6 +39,8 @@ public class MainWindow extends javax.swing.JFrame {
      private static boolean isImageEnabled = false;
      private static int lastRowSelected;
      private static boolean isModifying = false;
+     
+     private static String imgPath;
      
     /**
      * Creates new form MainWindow
@@ -64,6 +70,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.jTextField2.setEditable(false);
         this.jButton5.setEnabled(false);
         this.jButton6.setEnabled(false);
+        this.jButton8.setEnabled(false);
         this.jPanel6.setEnabled(false);
         
         this.jButton2.addActionListener(new ActionListener(){
@@ -87,6 +94,8 @@ public class MainWindow extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent me) {
 
+                jButton8.setEnabled(true);
+                
                 jTextField1.setText((String) webModel.getValueAt(jTable1.getSelectedRow(), 0));
                 jTextField2.setText((String) webModel.getValueAt(jTable1.getSelectedRow(), 1));
 
@@ -144,6 +153,7 @@ public class MainWindow extends javax.swing.JFrame {
                 jButton2.setEnabled(false);
                 jButton3.setEnabled(false);
                 jButton4.setEnabled(false);
+                jButton8.setEnabled(false);
                 jTable1.setEnabled(false);
                 jTabbedPane1.setEnabled(false);
                 
@@ -269,7 +279,7 @@ public class MainWindow extends javax.swing.JFrame {
                     
                     jPanel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
                     
-                    jTextField1.setEditable(true);
+                    jTextField1.setEditable(true);                   
                     jTextField2.setEditable(true);
                     jPanel6.setEnabled(true);
                     jButton5.setEnabled(true);
@@ -328,8 +338,15 @@ public class MainWindow extends javax.swing.JFrame {
                     if (isModifying)
                         webModel.removeRow(lastRowSelected);
                     
-                    webModel.addRow(jTextField1.getText(), jTextField2.getText(), 
-                            jLabel6.getIcon().toString().substring(5, jLabel6.getIcon().toString().length()));
+                    if (OSController.isUnix() || OSController.isMac())                   
+                        webModel.addRow(jTextField1.getText(), jTextField2.getText(), 
+                                jLabel6.getIcon().toString().substring(5, jLabel6.getIcon().toString().length()));
+                    else if (OSController.isWindows())
+                        webModel.addRow(jTextField1.getText(), jTextField2.getText(), 
+                                jLabel6.getIcon().toString().substring(6, jLabel6.getIcon().toString().length()));
+                    else
+                        webModel.addRow(jTextField1.getText(), jTextField2.getText(), 
+                                jLabel6.getIcon().toString());
                     
                     jButton1.setEnabled(true);
                     jButton2.setEnabled(true);
@@ -351,6 +368,18 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
         });
+        
+        this.jButton8.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (jTable1.getSelectedRow() != -1)                
+                    new ClipboardController()
+                            .copyToClipboard((String) webModel.getValueAt(jTable1.getSelectedRow(), 2));
+            }
+            
+        });
+        
     }
 
     /**
@@ -381,6 +410,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
@@ -428,7 +458,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -451,13 +481,22 @@ public class MainWindow extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
+        jTextField1.setMaximumSize(new java.awt.Dimension(212, 27));
+        jTextField1.setMinimumSize(new java.awt.Dimension(212, 27));
+        jTextField1.setPreferredSize(new java.awt.Dimension(212, 27));
+
+        jTextField2.setMaximumSize(new java.awt.Dimension(212, 27));
+        jTextField2.setMinimumSize(new java.awt.Dimension(212, 27));
+        jTextField2.setPreferredSize(new java.awt.Dimension(212, 27));
+
         jLabel1.setText("Nombre");
 
-        jLabel2.setText("Ruta");
+        jLabel2.setText("URL");
 
         jLabel3.setText("Imagen");
 
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel6.setToolTipText("Se recomienda que la imagen sea de 128x128 px");
         jPanel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel6.setMaximumSize(new java.awt.Dimension(128, 128));
         jPanel6.setMinimumSize(new java.awt.Dimension(128, 128));
@@ -498,6 +537,9 @@ public class MainWindow extends javax.swing.JFrame {
         jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton6.setIconTextGap(0);
 
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/clipboard-26.png"))); // NOI18N
+        jButton8.setToolTipText("Copiar ruta al portapapeles");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -505,14 +547,15 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField2)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton8)
+                        .addGap(10, 10, 10))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -522,7 +565,8 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(26, 26, 26)
                                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -539,13 +583,15 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addGap(116, 116, 116))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(12, 12, 12)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton8)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -688,8 +734,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
+                
                 new MainWindow().setVisible(true);
+                
             }
         });
     }
@@ -701,6 +750,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
