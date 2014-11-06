@@ -11,7 +11,7 @@ package omni.controller;
  */
 public class OSController {
     
-    private static final String osName = System.getProperty("os.name");
+    private static final String osName = System.getProperty("os.name").toLowerCase();
     
     public static boolean isWindows() {
         return (osName.contains("win"));
