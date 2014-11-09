@@ -18,9 +18,11 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import omni.controller.APPController;
 import omni.controller.ClipboardController;
 import omni.controller.OSController;
 import omni.controller.URLController;
+import omni.model.GestionAppModel;
 import omni.model.GestionWebModel;
 
 /**
@@ -34,9 +36,15 @@ public class MainWindow extends javax.swing.JFrame {
      
      private final GestionWebModel webModel;
      
-     private static boolean isImageEnabled = false;
-     private static int lastRowSelected;
-     private static boolean isModifying = false;
+     private static boolean isImageWebEnabled = false;
+     private static int lastWebRowSelected;
+     private static boolean isModifyingWeb = false;
+     
+     private final GestionAppModel appModel;
+     
+     private static boolean isImageAppEnabled = false;
+     private static int lastAppRowSelected;
+     private static boolean isModifyingApp = false;
      
     /**
      * Creates new form MainWindow
@@ -50,32 +58,34 @@ public class MainWindow extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setTitle("Omni");
         
-        this.jTable1.setModel(new GestionWebModel());
+        /*WEB*/
         
-        this.webModel = ((GestionWebModel)MainWindow.this.jTable1.getModel());
+        this.tablaWeb.setModel(new GestionWebModel());
         
-        this.jPanel1.setBackground(new Color(202, 238, 255));
-        this.jPanel2.setBackground(new Color(202, 238, 255));
-        this.jPanel3.setBackground(new Color(202, 238, 255));
-        this.jPanel4.setBackground(new Color(202, 238, 255));
-        this.jPanel5.setBackground(new Color(202, 238, 255));
+        this.webModel = ((GestionWebModel)MainWindow.this.tablaWeb.getModel());
         
-        this.jPanel6.setBackground(new Color(235, 248, 255));
+        this.panelPrincipal.setBackground(new Color(202, 238, 255));
+        this.panelWeb.setBackground(new Color(202, 238, 255));
+        this.panelApp.setBackground(new Color(202, 238, 255));
+        this.panelBotonesWeb.setBackground(new Color(202, 238, 255));
+        this.panelEditorWeb.setBackground(new Color(202, 238, 255));
         
-        this.jTextField1.setEditable(false);
-        this.jTextField2.setEditable(false);
-        this.jButton5.setEnabled(false);
-        this.jButton6.setEnabled(false);
-        this.jButton8.setEnabled(false);
-        this.jPanel6.setEnabled(false);
+        this.panelImagenWeb.setBackground(new Color(235, 248, 255));
         
-        this.jButton2.addActionListener(new ActionListener(){
+        this.textFieldNombreWeb.setEditable(false);
+        this.textFieldURLWeb.setEditable(false);
+        this.btnOkWeb.setEnabled(false);
+        this.btnCancelWeb.setEnabled(false);
+        this.btnClipboardWeb.setEnabled(false);
+        this.panelImagenWeb.setEnabled(false);
+        
+        this.btnIniciarWeb.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (jTable1.getSelectedRow() != -1){
+                if (tablaWeb.getSelectedRow() != -1){
 
-                    URLController.openUrl((String) webModel.getValueAt(jTable1.getSelectedRow(), 1));
+                    URLController.openUrl((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
 
                     }else{
                         JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
@@ -85,22 +95,22 @@ public class MainWindow extends javax.swing.JFrame {
             
         });
         
-        this.jTable1.addMouseListener(new MouseListener(){
+        this.tablaWeb.addMouseListener(new MouseListener(){
 
             @Override
             public void mouseClicked(MouseEvent me) {
 
-                jButton8.setEnabled(true);
+                btnClipboardWeb.setEnabled(true);
                 
-                jTextField1.setText((String) webModel.getValueAt(jTable1.getSelectedRow(), 0));
-                jTextField2.setText((String) webModel.getValueAt(jTable1.getSelectedRow(), 1));
+                textFieldNombreWeb.setText((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 0));
+                textFieldURLWeb.setText((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
 
-                File rutaAbs = new File((String) webModel.getValueAt(jTable1.getSelectedRow(), 2));
+                File rutaAbs = new File((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 2));
 
                 rutaAbs = rutaAbs.getAbsoluteFile();
 
                 try {
-                    jLabel6.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
+                    labelShowImagenWeb.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -129,59 +139,59 @@ public class MainWindow extends javax.swing.JFrame {
             
         });
         
-        this.jButton1.addActionListener(new ActionListener(){
+        this.btnAnyadirWeb.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent ae) {
                 
-                jTextField1.setText("");
-                jTextField2.setText("");
-                jLabel6.setIcon(null);
+                textFieldNombreWeb.setText("");
+                textFieldURLWeb.setText("");
+                labelShowImagenWeb.setIcon(null);
                 
-                jTextField1.setEditable(true);
-                jTextField2.setEditable(true);
-                jPanel6.setEnabled(true);
-                jButton5.setEnabled(true);
-                jButton6.setEnabled(true);
-                isImageEnabled = true;
+                textFieldNombreWeb.setEditable(true);
+                textFieldURLWeb.setEditable(true);
+                panelImagenWeb.setEnabled(true);
+                btnOkWeb.setEnabled(true);
+                btnCancelWeb.setEnabled(true);
+                isImageWebEnabled = true;
                 
-                jButton1.setEnabled(false);
-                jButton2.setEnabled(false);
-                jButton3.setEnabled(false);
-                jButton4.setEnabled(false);
-                jButton8.setEnabled(false);
-                jTable1.setEnabled(false);
-                jTabbedPane1.setEnabled(false);
+                btnAnyadirWeb.setEnabled(false);
+                btnIniciarWeb.setEnabled(false);
+                btnModificarWeb.setEnabled(false);
+                btnEliminarWeb.setEnabled(false);
+                btnClipboardWeb.setEnabled(false);
+                tablaWeb.setEnabled(false);
+                tabbedPanePrincipal.setEnabled(false);
                 
             }
             
         });
         
-        this.jButton4.addActionListener(new ActionListener(){
+        this.btnEliminarWeb.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent ae) {
                 
-                if (jTable1.getSelectedRow() != -1){
+                if (tablaWeb.getSelectedRow() != -1){
                     
                     if (JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar "
-                            +webModel.getValueAt(jTable1.getSelectedRow(), 0)+"?", 
+                            +webModel.getValueAt(tablaWeb.getSelectedRow(), 0)+"?", 
                             "Eliminar", JOptionPane.YES_NO_OPTION) == 0){
                     
-                        webModel.removeRow(jTable1.getSelectedRow());
+                        webModel.removeRow(tablaWeb.getSelectedRow());
                         
-                        jTextField1.setText("");
-                        jTextField2.setText("");
-                        jLabel6.setIcon(null);
-                        jTable1.clearSelection();
+                        textFieldNombreWeb.setText("");
+                        textFieldURLWeb.setText("");
+                        labelShowImagenWeb.setIcon(null);
+                        tablaWeb.clearSelection();
 
-                        jTextField1.setEditable(false);
-                        jTextField2.setEditable(false);
-                        jPanel6.setEnabled(false);
-                        jButton5.setEnabled(false);
-                        jButton6.setEnabled(false);
-                        jButton8.setEnabled(false);
-                        isImageEnabled = false;
+                        textFieldNombreWeb.setEditable(false);
+                        textFieldURLWeb.setEditable(false);
+                        panelImagenWeb.setEnabled(false);
+                        btnOkWeb.setEnabled(false);
+                        btnCancelWeb.setEnabled(false);
+                        btnClipboardWeb.setEnabled(false);
+                        isImageWebEnabled = false;
                     }
                 }else{
                     JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
@@ -191,48 +201,48 @@ public class MainWindow extends javax.swing.JFrame {
             
         });
         
-        this.jButton6.addActionListener(new ActionListener(){
+        this.btnCancelWeb.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                jTextField1.setText("");
-                jTextField2.setText("");
-                jLabel6.setIcon(null);
-                jTable1.clearSelection();
+                textFieldNombreWeb.setText("");
+                textFieldURLWeb.setText("");
+                labelShowImagenWeb.setIcon(null);
+                tablaWeb.clearSelection();
                 
-                jTextField1.setEditable(false);
-                jTextField2.setEditable(false);
-                jPanel6.setEnabled(false);
-                jButton5.setEnabled(false);
-                jButton6.setEnabled(false);
-                jButton8.setEnabled(false);
-                isImageEnabled = false;
+                textFieldNombreWeb.setEditable(false);
+                textFieldURLWeb.setEditable(false);
+                panelImagenWeb.setEnabled(false);
+                btnOkWeb.setEnabled(false);
+                btnCancelWeb.setEnabled(false);
+                btnClipboardWeb.setEnabled(false);
+                isImageWebEnabled = false;
                 
-                jButton1.setEnabled(true);
-                jButton2.setEnabled(true);
-                jButton3.setEnabled(true);
-                jButton4.setEnabled(true);
-                jTable1.setEnabled(true);
-                jTabbedPane1.setEnabled(true);
+                btnAnyadirWeb.setEnabled(true);
+                btnIniciarWeb.setEnabled(true);
+                btnModificarWeb.setEnabled(true);
+                btnEliminarWeb.setEnabled(true);
+                tablaWeb.setEnabled(true);
+                tabbedPanePrincipal.setEnabled(true);
                 
-                isModifying = false;
+                isModifyingWeb = false;
             }
             
         });
         
-        this.jPanel6.addMouseListener(new MouseListener(){
+        this.panelImagenWeb.addMouseListener(new MouseListener(){
             
             @Override
             public void mouseClicked(MouseEvent e) {
                 
-                if (isImageEnabled){
+                if (isImageWebEnabled){
                     if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 
                         File rutaAbs = jf.getSelectedFile().getAbsoluteFile();
 
                         try {
 
-                            jLabel6.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
+                            labelShowImagenWeb.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
 
                         } catch (MalformedURLException ex) {
                             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -254,13 +264,13 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                if (isImageEnabled)
+                if (isImageWebEnabled)
                     MainWindow.this.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if (isImageEnabled)
+                if (isImageWebEnabled)
                     MainWindow.this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
             
@@ -268,44 +278,44 @@ public class MainWindow extends javax.swing.JFrame {
         
 
         
-        this.jButton3.addActionListener(new ActionListener(){
+        this.btnModificarWeb.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent ae) {               
                 
-                if (jTable1.getSelectedRow() != -1){
+                if (tablaWeb.getSelectedRow() != -1){
                     
-                    jPanel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                    panelImagenWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
                     
-                    jTextField1.setEditable(true);                   
-                    jTextField2.setEditable(true);
-                    jPanel6.setEnabled(true);
-                    jButton5.setEnabled(true);
-                    jButton6.setEnabled(true);
-                    isImageEnabled = true;
+                    textFieldNombreWeb.setEditable(true);                   
+                    textFieldURLWeb.setEditable(true);
+                    panelImagenWeb.setEnabled(true);
+                    btnOkWeb.setEnabled(true);
+                    btnCancelWeb.setEnabled(true);
+                    isImageWebEnabled = true;
                     
-                    jButton1.setEnabled(false);
-                    jButton2.setEnabled(false);
-                    jButton3.setEnabled(false);
-                    jButton4.setEnabled(false);
-                    lastRowSelected = jTable1.getSelectedRow();
-                    jTable1.setEnabled(false);
-                    jTabbedPane1.setEnabled(false);
+                    btnAnyadirWeb.setEnabled(false);
+                    btnIniciarWeb.setEnabled(false);
+                    btnModificarWeb.setEnabled(false);
+                    btnEliminarWeb.setEnabled(false);
+                    lastWebRowSelected = tablaWeb.getSelectedRow();
+                    tablaWeb.setEnabled(false);
+                    tabbedPanePrincipal.setEnabled(false);
                     
-                    jTextField1.setText((String) webModel.getValueAt(jTable1.getSelectedRow(), 0));
-                    jTextField2.setText((String) webModel.getValueAt(jTable1.getSelectedRow(), 1));
+                    textFieldNombreWeb.setText((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 0));
+                    textFieldURLWeb.setText((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
 
-                    File rutaAbs = new File((String) webModel.getValueAt(jTable1.getSelectedRow(), 2));
+                    File rutaAbs = new File((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 2));
 
                     rutaAbs = rutaAbs.getAbsoluteFile();
                     
                     try {
-                        jLabel6.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
+                        labelShowImagenWeb.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
                     } catch (MalformedURLException ex) {
                         Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
-                    isModifying = true;
+                    isModifyingWeb = true;
                     
                 }else{
                     JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
@@ -314,51 +324,51 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         
-        this.jButton5.addActionListener(new ActionListener(){
+        this.btnOkWeb.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent ae) {
                 
-                if (!jTextField2.getText().equals("") 
-                        && !jTextField1.getText().equals("")
-                        && jLabel6.getIcon() != null){
+                if (!textFieldURLWeb.getText().equals("") 
+                        && !textFieldNombreWeb.getText().equals("")
+                        && labelShowImagenWeb.getIcon() != null){
                 
-                    jTextField1.setEditable(false);
-                    jTextField2.setEditable(false);
-                    jPanel6.setEnabled(false);
-                    jButton5.setEnabled(false);
-                    jButton6.setEnabled(false);
-                    isImageEnabled = false;
+                    textFieldNombreWeb.setEditable(false);
+                    textFieldURLWeb.setEditable(false);
+                    panelImagenWeb.setEnabled(false);
+                    btnOkWeb.setEnabled(false);
+                    btnCancelWeb.setEnabled(false);
+                    isImageWebEnabled = false;
 
-                    if (!jTextField2.getText().contains("://"))
-                        jTextField2.setText("http://"+jTextField2.getText());
+                    if (!textFieldURLWeb.getText().contains("://"))
+                        textFieldURLWeb.setText("http://"+textFieldURLWeb.getText());
                     
-                    if (isModifying)
-                        webModel.removeRow(lastRowSelected);
+                    if (isModifyingWeb)
+                        webModel.removeRow(lastWebRowSelected);
                     
                     if (OSController.isUnix() || OSController.isMac())                   
-                        webModel.addRow(jTextField1.getText(), jTextField2.getText(), 
-                                jLabel6.getIcon().toString().substring(5, jLabel6.getIcon().toString().length()));
+                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(), 
+                                labelShowImagenWeb.getIcon().toString().substring(5, labelShowImagenWeb.getIcon().toString().length()));
                     else if (OSController.isWindows())
-                        webModel.addRow(jTextField1.getText(), jTextField2.getText(), 
-                                jLabel6.getIcon().toString().substring(6, jLabel6.getIcon().toString().length()));
+                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(), 
+                                labelShowImagenWeb.getIcon().toString().substring(6, labelShowImagenWeb.getIcon().toString().length()));
                     else
-                        webModel.addRow(jTextField1.getText(), jTextField2.getText(), 
-                                jLabel6.getIcon().toString());
+                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(), 
+                                labelShowImagenWeb.getIcon().toString());
 
-                    jButton1.setEnabled(true);
-                    jButton2.setEnabled(true);
-                    jButton3.setEnabled(true);
-                    jButton4.setEnabled(true);
-                    jTable1.setEnabled(true);
-                    jTabbedPane1.setEnabled(true);
+                    btnAnyadirWeb.setEnabled(true);
+                    btnIniciarWeb.setEnabled(true);
+                    btnModificarWeb.setEnabled(true);
+                    btnEliminarWeb.setEnabled(true);
+                    tablaWeb.setEnabled(true);
+                    tabbedPanePrincipal.setEnabled(true);
                     
-                    jTextField1.setText("");
-                    jTextField2.setText("");
-                    jLabel6.setIcon(null);
-                    jTable1.clearSelection();
+                    textFieldNombreWeb.setText("");
+                    textFieldURLWeb.setText("");
+                    labelShowImagenWeb.setIcon(null);
+                    tablaWeb.clearSelection();
                     
-                    isModifying = false;
+                    isModifyingWeb = false;
                     
                 }else{
                     JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos.",
@@ -367,13 +377,366 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         
-        this.jButton8.addActionListener(new ActionListener(){
+        this.btnClipboardWeb.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (jTable1.getSelectedRow() != -1)                
+                if (tablaWeb.getSelectedRow() != -1)                
                     new ClipboardController()
-                            .copyToClipboard((String) webModel.getValueAt(jTable1.getSelectedRow(), 2));
+                            .copyToClipboard((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 2));
+            }
+            
+        });
+        
+        /*APP*/
+        
+        if (OSController.isUnix()){
+            this.labelRutaApp.setText("Comando o ruta aplicación.");
+        }
+        
+        this.tablaApp.setModel(new GestionAppModel());
+        
+        this.appModel = ((GestionAppModel)MainWindow.this.tablaApp.getModel());
+        
+        this.panelApp.setBackground(new Color(202, 238, 255));
+        this.panelBotonesApp.setBackground(new Color(202, 238, 255));
+        this.panelEditorApp.setBackground(new Color(202, 238, 255));
+        
+        this.panelImagenApp.setBackground(new Color(235, 248, 255));
+        
+        this.textFieldNombreApp.setEditable(false);
+        this.textFieldRutaApp.setEditable(false);
+        this.btnRutaApp.setEnabled(false);
+        this.btnOkApp.setEnabled(false);
+        this.btnCancelApp.setEnabled(false);
+        this.btnClipboardApp.setEnabled(false);
+        this.panelImagenApp.setEnabled(false);
+        
+        this.btnRutaApp.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+                        textFieldRutaApp.setText(jf.getSelectedFile().getAbsoluteFile().getAbsolutePath());
+                        
+                }
+            }
+            
+        });
+        
+        this.btnIniciarApp.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (tablaApp.getSelectedRow() != -1){
+
+                    APPController.openApp((String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
+
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
+                        "Error al iniciar", JOptionPane.ERROR_MESSAGE);
+                    }
+            }
+            
+        });
+        
+        this.tablaApp.addMouseListener(new MouseListener(){
+
+            @Override
+            public void mouseClicked(MouseEvent me) {
+
+                btnClipboardApp.setEnabled(true);
+                
+                textFieldNombreApp.setText((String) appModel.getValueAt(tablaApp.getSelectedRow(), 0));
+                textFieldRutaApp.setText((String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
+
+                File rutaAbs = new File((String) appModel.getValueAt(tablaApp.getSelectedRow(), 2));
+
+                rutaAbs = rutaAbs.getAbsoluteFile();
+
+                try {
+                    labelShowImagenApp.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent me) {
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent me) {
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent me) {
+                
+            }
+
+            @Override
+            public void mouseExited(MouseEvent me) {
+                
+            }
+            
+        });
+        
+        this.btnAnyadirApp.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+                textFieldNombreApp.setText("");
+                textFieldRutaApp.setText("");
+                labelShowImagenApp.setIcon(null);
+                
+                textFieldNombreApp.setEditable(true);
+                textFieldRutaApp.setEditable(true);
+                panelImagenApp.setEnabled(true);
+                btnRutaApp.setEnabled(true);
+                btnOkApp.setEnabled(true);
+                btnCancelApp.setEnabled(true);
+                isImageAppEnabled = true;
+                
+                btnAnyadirApp.setEnabled(false);
+                btnIniciarApp.setEnabled(false);
+                btnModificarApp.setEnabled(false);
+                btnEliminarApp.setEnabled(false);
+                btnClipboardApp.setEnabled(false);
+                tablaApp.setEnabled(false);
+                tabbedPanePrincipal.setEnabled(false);
+                
+            }
+            
+        });
+        
+        this.btnEliminarApp.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+                if (tablaApp.getSelectedRow() != -1){
+                    
+                    if (JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar "
+                            +appModel.getValueAt(tablaApp.getSelectedRow(), 0)+"?", 
+                            "Eliminar", JOptionPane.YES_NO_OPTION) == 0){
+                    
+                        appModel.removeRow(tablaApp.getSelectedRow());
+                        
+                        textFieldNombreApp.setText("");
+                        textFieldRutaApp.setText("");
+                        labelShowImagenApp.setIcon(null);
+                        tablaApp.clearSelection();
+
+                        textFieldNombreApp.setEditable(false);
+                        textFieldRutaApp.setEditable(false);
+                        panelImagenApp.setEnabled(false);
+                        btnRutaApp.setEnabled(false);
+                        btnOkApp.setEnabled(false);
+                        btnCancelApp.setEnabled(false);
+                        btnClipboardApp.setEnabled(false);
+                        isImageAppEnabled = false;
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
+                    "Error al eliminar", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            
+        });
+        
+        this.btnCancelApp.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                textFieldNombreApp.setText("");
+                textFieldRutaApp.setText("");
+                labelShowImagenApp.setIcon(null);
+                tablaApp.clearSelection();
+                
+                textFieldNombreApp.setEditable(false);
+                textFieldRutaApp.setEditable(false);
+                panelImagenApp.setEnabled(false);
+                btnRutaApp.setEnabled(false);
+                btnOkApp.setEnabled(false);
+                btnCancelApp.setEnabled(false);
+                btnClipboardApp.setEnabled(false);
+                isImageAppEnabled = false;
+                
+                btnAnyadirApp.setEnabled(true);
+                btnIniciarApp.setEnabled(true);
+                btnModificarApp.setEnabled(true);
+                btnEliminarApp.setEnabled(true);
+                tablaApp.setEnabled(true);
+                tabbedPanePrincipal.setEnabled(true);
+                
+                isModifyingApp = false;
+            }
+            
+        });
+        
+        this.panelImagenApp.addMouseListener(new MouseListener(){
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                
+                if (isImageAppEnabled){
+                    if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+                        File rutaAbs = jf.getSelectedFile().getAbsoluteFile();
+
+                        try {
+
+                            labelShowImagenApp.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
+
+                        } catch (MalformedURLException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (isImageAppEnabled)
+                    MainWindow.this.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (isImageAppEnabled)
+                    MainWindow.this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            }
+            
+        });
+        
+
+        
+        this.btnModificarApp.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {               
+                
+                if (tablaApp.getSelectedRow() != -1){
+                    
+                    panelImagenApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                    
+                    textFieldNombreApp.setEditable(true);                   
+                    textFieldRutaApp.setEditable(true);
+                    panelImagenApp.setEnabled(true);
+                    btnRutaApp.setEnabled(true);
+                    btnOkApp.setEnabled(true);
+                    btnCancelApp.setEnabled(true);
+                    isImageAppEnabled = true;
+                    
+                    btnAnyadirApp.setEnabled(false);
+                    btnIniciarApp.setEnabled(false);
+                    btnModificarApp.setEnabled(false);
+                    btnEliminarApp.setEnabled(false);
+                    lastAppRowSelected = tablaApp.getSelectedRow();
+                    tablaApp.setEnabled(false);
+                    tabbedPanePrincipal.setEnabled(false);
+                    
+                    textFieldNombreApp.setText((String) appModel.getValueAt(tablaApp.getSelectedRow(), 0));
+                    textFieldRutaApp.setText((String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
+
+                    File rutaAbs = new File((String) appModel.getValueAt(tablaApp.getSelectedRow(), 2));
+
+                    rutaAbs = rutaAbs.getAbsoluteFile();
+                    
+                    try {
+                        labelShowImagenApp.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    isModifyingApp = true;
+                    
+                }else{
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
+                    "Error al modificar", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
+        this.btnOkApp.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+                if (!textFieldRutaApp.getText().equals("") 
+                        && !textFieldNombreApp.getText().equals("")
+                        && labelShowImagenApp.getIcon() != null){
+                
+                    textFieldNombreApp.setEditable(false);
+                    textFieldRutaApp.setEditable(false);
+                    panelImagenApp.setEnabled(false);
+                    btnRutaApp.setEnabled(false);
+                    btnOkApp.setEnabled(false);
+                    btnCancelApp.setEnabled(false);
+                    isImageAppEnabled = false;
+                    
+                    /*
+                    if (!textFieldRutaApp.getText().contains("://"))
+                        textFieldURLWeb.setText("http://"+textFieldURLWeb.getText());
+                    */
+                    
+                    if (isModifyingApp)
+                        appModel.removeRow(lastAppRowSelected);
+                    
+                    if (OSController.isUnix() || OSController.isMac())                   
+                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(), 
+                                labelShowImagenApp.getIcon().toString().substring(5, labelShowImagenApp.getIcon().toString().length()));
+                    else if (OSController.isWindows())
+                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(), 
+                                labelShowImagenApp.getIcon().toString().substring(6, labelShowImagenApp.getIcon().toString().length()));
+                    else
+                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(), 
+                                labelShowImagenApp.getIcon().toString());
+
+                    btnAnyadirApp.setEnabled(true);
+                    btnIniciarApp.setEnabled(true);
+                    btnModificarApp.setEnabled(true);
+                    btnEliminarApp.setEnabled(true);
+                    tablaApp.setEnabled(true);
+                    tabbedPanePrincipal.setEnabled(true);
+                    
+                    textFieldNombreApp.setText("");
+                    textFieldRutaApp.setText("");
+                    labelShowImagenApp.setIcon(null);
+                    tablaApp.clearSelection();
+                    
+                    isModifyingApp = false;
+                    
+                }else{
+                    JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos.",
+                        "Imposible añadir web", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
+        this.btnClipboardApp.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (tablaApp.getSelectedRow() != -1)                
+                    new ClipboardController()
+                            .copyToClipboard((String) appModel.getValueAt(tablaApp.getSelectedRow(), 2));
             }
             
         });
@@ -389,29 +752,47 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
+        panelPrincipal = new javax.swing.JPanel();
+        tabbedPanePrincipal = new javax.swing.JTabbedPane();
+        panelWeb = new javax.swing.JPanel();
+        panelBotonesWeb = new javax.swing.JPanel();
+        btnAnyadirWeb = new javax.swing.JButton();
+        btnModificarWeb = new javax.swing.JButton();
+        btnEliminarWeb = new javax.swing.JButton();
+        btnIniciarWeb = new javax.swing.JButton();
+        panelEditorWeb = new javax.swing.JPanel();
+        textFieldNombreWeb = new javax.swing.JTextField();
+        textFieldURLWeb = new javax.swing.JTextField();
+        labelNombreWeb = new javax.swing.JLabel();
+        labelURLWeb = new javax.swing.JLabel();
+        labelImagenWeb = new javax.swing.JLabel();
+        panelImagenWeb = new javax.swing.JPanel();
+        labelShowImagenWeb = new javax.swing.JLabel();
+        btnOkWeb = new javax.swing.JButton();
+        btnCancelWeb = new javax.swing.JButton();
+        btnClipboardWeb = new javax.swing.JButton();
+        scrollPaneTablaWeb = new javax.swing.JScrollPane();
+        tablaWeb = new javax.swing.JTable();
+        panelApp = new javax.swing.JPanel();
+        panelBotonesApp = new javax.swing.JPanel();
+        btnAnyadirApp = new javax.swing.JButton();
+        btnModificarApp = new javax.swing.JButton();
+        btnEliminarApp = new javax.swing.JButton();
+        btnIniciarApp = new javax.swing.JButton();
+        panelEditorApp = new javax.swing.JPanel();
+        textFieldNombreApp = new javax.swing.JTextField();
+        textFieldRutaApp = new javax.swing.JTextField();
+        labelNombreApp = new javax.swing.JLabel();
+        labelRutaApp = new javax.swing.JLabel();
+        labelImagenApp = new javax.swing.JLabel();
+        panelImagenApp = new javax.swing.JPanel();
+        labelShowImagenApp = new javax.swing.JLabel();
+        btnOkApp = new javax.swing.JButton();
+        btnCancelApp = new javax.swing.JButton();
+        btnClipboardApp = new javax.swing.JButton();
+        btnRutaApp = new javax.swing.JButton();
+        scrollPaneTablaApp = new javax.swing.JScrollPane();
+        tablaApp = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -427,181 +808,174 @@ public class MainWindow extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(714, 612));
         setResizable(false);
 
-        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        tabbedPanePrincipal.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPanePrincipal.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        panelBotonesWeb.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/add_file-26.png"))); // NOI18N
-        jButton1.setText("Añadir");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAnyadirWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/add_file-26.png"))); // NOI18N
+        btnAnyadirWeb.setText("Añadir");
+        btnAnyadirWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/edit_file-26.png"))); // NOI18N
-        jButton3.setText("Modificar");
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnModificarWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/edit_file-26.png"))); // NOI18N
+        btnModificarWeb.setText("Modificar");
+        btnModificarWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete-26.png"))); // NOI18N
-        jButton4.setText("Eliminar");
-        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminarWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete-26.png"))); // NOI18N
+        btnEliminarWeb.setText("Eliminar");
+        btnEliminarWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/external_link-64.png"))); // NOI18N
-        jButton2.setText("¡ INICIAR !");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnIniciarWeb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnIniciarWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/external_link-64.png"))); // NOI18N
+        btnIniciarWeb.setText("¡ INICIAR !");
+        btnIniciarWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelBotonesWebLayout = new javax.swing.GroupLayout(panelBotonesWeb);
+        panelBotonesWeb.setLayout(panelBotonesWebLayout);
+        panelBotonesWebLayout.setHorizontalGroup(
+            panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBotonesWebLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAnyadirWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnIniciarWeb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnModificarWeb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(93, 93, 93)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnEliminarWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        panelBotonesWebLayout.setVerticalGroup(
+            panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBotonesWebLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                .addGroup(panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAnyadirWeb)
+                    .addComponent(btnModificarWeb)
+                    .addComponent(btnEliminarWeb))
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(btnIniciarWeb)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        panelEditorWeb.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jTextField1.setMaximumSize(new java.awt.Dimension(212, 27));
-        jTextField1.setMinimumSize(new java.awt.Dimension(212, 27));
-        jTextField1.setPreferredSize(new java.awt.Dimension(212, 27));
+        textFieldNombreWeb.setMaximumSize(new java.awt.Dimension(212, 27));
+        textFieldNombreWeb.setMinimumSize(new java.awt.Dimension(212, 27));
+        textFieldNombreWeb.setPreferredSize(new java.awt.Dimension(212, 27));
 
-        jTextField2.setMaximumSize(new java.awt.Dimension(212, 27));
-        jTextField2.setMinimumSize(new java.awt.Dimension(212, 27));
-        jTextField2.setPreferredSize(new java.awt.Dimension(212, 27));
+        textFieldURLWeb.setMaximumSize(new java.awt.Dimension(212, 27));
+        textFieldURLWeb.setMinimumSize(new java.awt.Dimension(212, 27));
+        textFieldURLWeb.setPreferredSize(new java.awt.Dimension(212, 27));
 
-        jLabel1.setText("Nombre");
+        labelNombreWeb.setText("Nombre");
 
-        jLabel2.setText("URL");
+        labelURLWeb.setText("URL");
 
-        jLabel3.setText("Imagen");
+        labelImagenWeb.setText("Imagen");
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel6.setToolTipText("Se recomienda que la imagen sea de 128x128 px");
-        jPanel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel6.setMaximumSize(new java.awt.Dimension(128, 128));
-        jPanel6.setMinimumSize(new java.awt.Dimension(128, 128));
-        jPanel6.setPreferredSize(new java.awt.Dimension(128, 128));
+        panelImagenWeb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelImagenWeb.setToolTipText("Se recomienda que la imagen sea de 128x128 px");
+        panelImagenWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        panelImagenWeb.setMaximumSize(new java.awt.Dimension(128, 128));
+        panelImagenWeb.setMinimumSize(new java.awt.Dimension(128, 128));
+        panelImagenWeb.setPreferredSize(new java.awt.Dimension(128, 128));
 
-        jLabel6.setMaximumSize(new java.awt.Dimension(128, 128));
-        jLabel6.setMinimumSize(new java.awt.Dimension(128, 128));
+        labelShowImagenWeb.setMaximumSize(new java.awt.Dimension(128, 128));
+        labelShowImagenWeb.setMinimumSize(new java.awt.Dimension(128, 128));
+        labelShowImagenWeb.setPreferredSize(new java.awt.Dimension(128, 128));
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 126, Short.MAX_VALUE)
-            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel6Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelImagenWebLayout = new javax.swing.GroupLayout(panelImagenWeb);
+        panelImagenWeb.setLayout(panelImagenWebLayout);
+        panelImagenWebLayout.setHorizontalGroup(
+            panelImagenWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 128, Short.MAX_VALUE)
+            .addGroup(panelImagenWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelImagenWebLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelShowImagenWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 126, Short.MAX_VALUE)
-            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel6Layout.createSequentialGroup()
+        panelImagenWebLayout.setVerticalGroup(
+            panelImagenWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 128, Short.MAX_VALUE)
+            .addGroup(panelImagenWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelImagenWebLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelShowImagenWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/checkmark-26.png"))); // NOI18N
-        jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton5.setIconTextGap(0);
-        jButton5.setMaximumSize(new java.awt.Dimension(38, 36));
-        jButton5.setMinimumSize(new java.awt.Dimension(38, 36));
-        jButton5.setPreferredSize(new java.awt.Dimension(38, 36));
+        btnOkWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/checkmark-26.png"))); // NOI18N
+        btnOkWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnOkWeb.setIconTextGap(0);
+        btnOkWeb.setMaximumSize(new java.awt.Dimension(38, 36));
+        btnOkWeb.setMinimumSize(new java.awt.Dimension(38, 36));
+        btnOkWeb.setPreferredSize(new java.awt.Dimension(38, 36));
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/cancel-2-24.png"))); // NOI18N
-        jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton6.setIconTextGap(0);
+        btnCancelWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/cancel-2-24.png"))); // NOI18N
+        btnCancelWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCancelWeb.setIconTextGap(0);
 
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/clipboard-26.png"))); // NOI18N
-        jButton8.setToolTipText("Copiar ruta al portapapeles");
+        btnClipboardWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/clipboard-26.png"))); // NOI18N
+        btnClipboardWeb.setToolTipText("Copiar ruta al portapapeles");
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelEditorWebLayout = new javax.swing.GroupLayout(panelEditorWeb);
+        panelEditorWeb.setLayout(panelEditorWebLayout);
+        panelEditorWebLayout.setHorizontalGroup(
+            panelEditorWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEditorWebLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelEditorWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelEditorWebLayout.createSequentialGroup()
+                        .addGroup(panelEditorWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelNombreWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelURLWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelImagenWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelEditorWebLayout.createSequentialGroup()
+                                .addComponent(btnOkWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(26, 26, 26)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnCancelWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(textFieldURLWeb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEditorWebLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panelEditorWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(textFieldNombreWeb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEditorWebLayout.createSequentialGroup()
+                                .addComponent(panelImagenWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton8)
+                                .addComponent(btnClipboardWeb)
                                 .addGap(10, 10, 10)))))
                 .addContainerGap())
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        panelEditorWebLayout.setVerticalGroup(
+            panelEditorWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEditorWebLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(labelNombreWeb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textFieldNombreWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2)
+                .addComponent(labelURLWeb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textFieldURLWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addGap(116, 116, 116))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton8)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6))
+                .addComponent(labelImagenWeb)
+                .addGap(12, 12, 12)
+                .addGroup(panelEditorWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnClipboardWeb)
+                    .addComponent(panelImagenWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelEditorWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnOkWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelWeb))
                 .addContainerGap())
         );
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        scrollPaneTablaWeb.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaWeb.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -612,57 +986,258 @@ public class MainWindow extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        scrollPaneTablaWeb.setViewportView(tablaWeb);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+        javax.swing.GroupLayout panelWebLayout = new javax.swing.GroupLayout(panelWeb);
+        panelWeb.setLayout(panelWebLayout);
+        panelWebLayout.setHorizontalGroup(
+            panelWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelWebLayout.createSequentialGroup()
+                .addGroup(panelWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelWebLayout.createSequentialGroup()
+                        .addComponent(scrollPaneTablaWeb, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(panelEditorWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelBotonesWeb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        panelWebLayout.setVerticalGroup(
+            panelWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelWebLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(scrollPaneTablaWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(panelEditorWeb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelBotonesWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
 
-        jTabbedPane1.addTab("Web", jPanel2);
+        tabbedPanePrincipal.addTab("Web", panelWeb);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 659, Short.MAX_VALUE)
+        panelBotonesApp.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        btnAnyadirApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/add_file-26.png"))); // NOI18N
+        btnAnyadirApp.setText("Añadir");
+        btnAnyadirApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btnModificarApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/edit_file-26.png"))); // NOI18N
+        btnModificarApp.setText("Modificar");
+        btnModificarApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btnEliminarApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete-26.png"))); // NOI18N
+        btnEliminarApp.setText("Eliminar");
+        btnEliminarApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btnIniciarApp.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnIniciarApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/external_link-64.png"))); // NOI18N
+        btnIniciarApp.setText("¡ INICIAR !");
+        btnIniciarApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        javax.swing.GroupLayout panelBotonesAppLayout = new javax.swing.GroupLayout(panelBotonesApp);
+        panelBotonesApp.setLayout(panelBotonesAppLayout);
+        panelBotonesAppLayout.setHorizontalGroup(
+            panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBotonesAppLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnAnyadirApp, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                .addGroup(panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnIniciarApp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnModificarApp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(93, 93, 93)
+                .addComponent(btnEliminarApp, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 545, Short.MAX_VALUE)
+        panelBotonesAppLayout.setVerticalGroup(
+            panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBotonesAppLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAnyadirApp)
+                    .addComponent(btnModificarApp)
+                    .addComponent(btnEliminarApp))
+                .addGap(18, 18, 18)
+                .addComponent(btnIniciarApp)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("App", jPanel3);
+        panelEditorApp.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
+        textFieldNombreApp.setMaximumSize(new java.awt.Dimension(212, 27));
+        textFieldNombreApp.setMinimumSize(new java.awt.Dimension(212, 27));
+        textFieldNombreApp.setPreferredSize(new java.awt.Dimension(212, 27));
+
+        textFieldRutaApp.setMaximumSize(new java.awt.Dimension(212, 27));
+        textFieldRutaApp.setMinimumSize(new java.awt.Dimension(212, 27));
+        textFieldRutaApp.setPreferredSize(new java.awt.Dimension(212, 27));
+
+        labelNombreApp.setText("Nombre");
+
+        labelRutaApp.setText("Ruta aplicación");
+
+        labelImagenApp.setText("Imagen");
+
+        panelImagenApp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelImagenApp.setToolTipText("Se recomienda que la imagen sea de 128x128 px");
+        panelImagenApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        panelImagenApp.setMaximumSize(new java.awt.Dimension(128, 128));
+        panelImagenApp.setMinimumSize(new java.awt.Dimension(128, 128));
+        panelImagenApp.setPreferredSize(new java.awt.Dimension(128, 128));
+
+        labelShowImagenApp.setMaximumSize(new java.awt.Dimension(128, 128));
+        labelShowImagenApp.setMinimumSize(new java.awt.Dimension(128, 128));
+        labelShowImagenApp.setPreferredSize(new java.awt.Dimension(128, 128));
+
+        javax.swing.GroupLayout panelImagenAppLayout = new javax.swing.GroupLayout(panelImagenApp);
+        panelImagenApp.setLayout(panelImagenAppLayout);
+        panelImagenAppLayout.setHorizontalGroup(
+            panelImagenAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 128, Short.MAX_VALUE)
+            .addGroup(panelImagenAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelImagenAppLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(labelShowImagenApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+        panelImagenAppLayout.setVerticalGroup(
+            panelImagenAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 128, Short.MAX_VALUE)
+            .addGroup(panelImagenAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelImagenAppLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(labelShowImagenApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        btnOkApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/checkmark-26.png"))); // NOI18N
+        btnOkApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnOkApp.setIconTextGap(0);
+        btnOkApp.setMaximumSize(new java.awt.Dimension(38, 36));
+        btnOkApp.setMinimumSize(new java.awt.Dimension(38, 36));
+        btnOkApp.setPreferredSize(new java.awt.Dimension(38, 36));
+
+        btnCancelApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/cancel-2-24.png"))); // NOI18N
+        btnCancelApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCancelApp.setIconTextGap(0);
+
+        btnClipboardApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/clipboard-26.png"))); // NOI18N
+        btnClipboardApp.setToolTipText("Copiar ruta al portapapeles");
+
+        btnRutaApp.setText("...");
+
+        javax.swing.GroupLayout panelEditorAppLayout = new javax.swing.GroupLayout(panelEditorApp);
+        panelEditorApp.setLayout(panelEditorAppLayout);
+        panelEditorAppLayout.setHorizontalGroup(
+            panelEditorAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEditorAppLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelEditorAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelEditorAppLayout.createSequentialGroup()
+                        .addGroup(panelEditorAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(panelEditorAppLayout.createSequentialGroup()
+                                .addGroup(panelEditorAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelEditorAppLayout.createSequentialGroup()
+                                        .addComponent(labelRutaApp, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(textFieldRutaApp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRutaApp, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(labelNombreApp, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelImagenApp, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelEditorAppLayout.createSequentialGroup()
+                                .addComponent(btnOkApp, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addComponent(btnCancelApp, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEditorAppLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(panelEditorAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(textFieldNombreApp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEditorAppLayout.createSequentialGroup()
+                                .addComponent(panelImagenApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnClipboardApp)
+                                .addGap(10, 10, 10)))))
+                .addContainerGap())
+        );
+        panelEditorAppLayout.setVerticalGroup(
+            panelEditorAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEditorAppLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelNombreApp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(textFieldNombreApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(labelRutaApp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelEditorAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textFieldRutaApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRutaApp))
+                .addGap(18, 18, 18)
+                .addComponent(labelImagenApp)
+                .addGap(12, 12, 12)
+                .addGroup(panelEditorAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnClipboardApp)
+                    .addComponent(panelImagenApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelEditorAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnOkApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelApp))
+                .addContainerGap())
+        );
+
+        scrollPaneTablaApp.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        tablaApp.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollPaneTablaApp.setViewportView(tablaApp);
+
+        javax.swing.GroupLayout panelAppLayout = new javax.swing.GroupLayout(panelApp);
+        panelApp.setLayout(panelAppLayout);
+        panelAppLayout.setHorizontalGroup(
+            panelAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAppLayout.createSequentialGroup()
+                .addGroup(panelAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelAppLayout.createSequentialGroup()
+                        .addComponent(scrollPaneTablaApp, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelEditorApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelBotonesApp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        panelAppLayout.setVerticalGroup(
+            panelAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAppLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(scrollPaneTablaApp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(panelEditorApp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelBotonesApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+        );
+
+        tabbedPanePrincipal.addTab("App", panelApp);
+
+        javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
+        panelPrincipal.setLayout(panelPrincipalLayout);
+        panelPrincipalLayout.setHorizontalGroup(
+            panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(tabbedPanePrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
+        );
+        panelPrincipalLayout.setVerticalGroup(
+            panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(tabbedPanePrincipal, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         jMenu1.setText("Inicio");
@@ -695,11 +1270,11 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -744,18 +1319,21 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JButton btnAnyadirApp;
+    private javax.swing.JButton btnAnyadirWeb;
+    private javax.swing.JButton btnCancelApp;
+    private javax.swing.JButton btnCancelWeb;
+    private javax.swing.JButton btnClipboardApp;
+    private javax.swing.JButton btnClipboardWeb;
+    private javax.swing.JButton btnEliminarApp;
+    private javax.swing.JButton btnEliminarWeb;
+    private javax.swing.JButton btnIniciarApp;
+    private javax.swing.JButton btnIniciarWeb;
+    private javax.swing.JButton btnModificarApp;
+    private javax.swing.JButton btnModificarWeb;
+    private javax.swing.JButton btnOkApp;
+    private javax.swing.JButton btnOkWeb;
+    private javax.swing.JButton btnRutaApp;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -764,16 +1342,31 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel labelImagenApp;
+    private javax.swing.JLabel labelImagenWeb;
+    private javax.swing.JLabel labelNombreApp;
+    private javax.swing.JLabel labelNombreWeb;
+    private javax.swing.JLabel labelRutaApp;
+    private javax.swing.JLabel labelShowImagenApp;
+    private javax.swing.JLabel labelShowImagenWeb;
+    private javax.swing.JLabel labelURLWeb;
+    private javax.swing.JPanel panelApp;
+    private javax.swing.JPanel panelBotonesApp;
+    private javax.swing.JPanel panelBotonesWeb;
+    private javax.swing.JPanel panelEditorApp;
+    private javax.swing.JPanel panelEditorWeb;
+    private javax.swing.JPanel panelImagenApp;
+    private javax.swing.JPanel panelImagenWeb;
+    private javax.swing.JPanel panelPrincipal;
+    private javax.swing.JPanel panelWeb;
+    private javax.swing.JScrollPane scrollPaneTablaApp;
+    private javax.swing.JScrollPane scrollPaneTablaWeb;
+    private javax.swing.JTabbedPane tabbedPanePrincipal;
+    private javax.swing.JTable tablaApp;
+    private javax.swing.JTable tablaWeb;
+    private javax.swing.JTextField textFieldNombreApp;
+    private javax.swing.JTextField textFieldNombreWeb;
+    private javax.swing.JTextField textFieldRutaApp;
+    private javax.swing.JTextField textFieldURLWeb;
     // End of variables declaration//GEN-END:variables
 }

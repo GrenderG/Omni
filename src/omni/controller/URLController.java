@@ -23,12 +23,10 @@ public class URLController {
             
             Desktop.getDesktop().browse(new URI(url));
             
-        } catch (IOException ex) {
+        } catch (IOException | URISyntaxException ex) {
             JOptionPane.showMessageDialog(null, "Imposible abrir la URL, asegúrate de que está bien escrita.", 
                     "Error al intentar abrir", JOptionPane.ERROR_MESSAGE);
-        } catch (URISyntaxException ex) {
-            JOptionPane.showMessageDialog(null, "Imposible abrir la URL, asegúrate de que está bien escrita.",
-                    "Error al intentar abrir", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
     }
     

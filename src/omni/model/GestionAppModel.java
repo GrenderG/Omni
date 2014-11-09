@@ -12,18 +12,18 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author campus
  */
-public class GestionAccesosModel  extends AbstractTableModel {
+public class GestionAppModel  extends AbstractTableModel {
     ArrayList<Object[]> datos = new ArrayList<>();
     String [] columns = {"Nombre", "Ruta", "Imagen"};
     
     Class[] types = new Class[] {java.lang.String.class, java.lang.String.class, 
             java.lang.Integer.class};
     
-    public GestionAccesosModel(){
+    public GestionAppModel(){
         
     }
     
-    public GestionAccesosModel (String[] info){
+    public GestionAppModel (String[] info){
         Object[] row = new Object[3];
         
         row[0] = info[0];

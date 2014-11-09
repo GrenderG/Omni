@@ -5,6 +5,8 @@
  */
 package omni.controller;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author grender
@@ -14,9 +16,21 @@ public class APPController {
     public static void openApp(String url){
         Runtime app = Runtime.getRuntime();
         try{
-            app.exec(url);
+            if (OSController.isUnix()){
+                if (!url.contains("."))
+                    app.exec(url);
+            }else{
+                if (url.contains(".exe"))           
+                    app.exec(url);
+                else if (url.contains(".jar"))
+                    app.exec("java -jar "+url);
+                else if (url.contains(".bat"))
+                    app.exec("cmd /c start "+url);
+            }
         }catch(Exception e){
-            System.out.println("No se ha podido abrir la aplicacion");
+            JOptionPane.showMessageDialog(null, "No se ha podido abrir la aplicacion, asegúrate de que es un archivo ejecutable.",
+                    "Error al intentar abrir", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 }
