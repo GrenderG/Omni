@@ -649,13 +649,7 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" attributes="0">
-                                                      <Component id="labelRutaApp" min="-2" pref="154" max="-2" attributes="0"/>
-                                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                                  </Group>
-                                                  <Component id="textFieldRutaApp" pref="0" max="32767" attributes="0"/>
-                                              </Group>
+                                              <Component id="textFieldRutaApp" pref="0" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="btnRutaApp" min="-2" pref="30" max="-2" attributes="0"/>
                                           </Group>
@@ -666,6 +660,7 @@
                                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                               <Component id="btnCancelApp" min="-2" pref="93" max="-2" attributes="0"/>
                                           </Group>
+                                          <Component id="labelRutaApp" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>

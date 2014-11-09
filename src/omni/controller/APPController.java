@@ -5,6 +5,7 @@
  */
 package omni.controller;
 
+import java.io.File;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,8 +17,15 @@ public class APPController {
     public static void openApp(String url){
         Runtime app = Runtime.getRuntime();
         try{
-            if (OSController.isUnix()){
-                if (!url.contains("."))
+            if (OSController.isUnix() || OSController.isMac()){
+                if (url.contains(".jar"))
+                    app.exec("java -jar "+url);
+                else if (url.contains(".sh")){
+                    app.exec("chmod +x "+url);
+                    ProcessBuilder pb = new ProcessBuilder("/bin/sh", url);
+                    pb.directory(new File(url));
+                    Process p = pb.start();
+                }else
                     app.exec(url);
             }else{
                 if (url.contains(".exe"))           
