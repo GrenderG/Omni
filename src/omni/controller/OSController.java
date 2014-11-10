@@ -33,15 +33,15 @@ public class OSController {
     
     public static String getOS(){
         if (isWindows()) {
-            return "win";
+            return "Windows";
         } else if (isMac()) {
-            return "osx";
+            return "OSx";
         } else if (isUnix()) {
-            return "uni";
+            return "Linux";
         } else if (isSolaris()) {
-            return "sol";
+            return "Solaris";
         } else {
-            return "err";
+            return "Unknown";
         }
     }
 }

@@ -22,9 +22,7 @@ public class APPController {
                     app.exec("java -jar "+url);
                 else if (url.contains(".sh")){
                     app.exec("chmod +x "+url);
-                    ProcessBuilder pb = new ProcessBuilder("/bin/sh", url);
-                    pb.directory(new File(url));
-                    Process p = pb.start();
+                    app.exec(url);
                 }else
                     app.exec(url);
             }else{
@@ -34,6 +32,8 @@ public class APPController {
                     app.exec("java -jar "+url);
                 else if (url.contains(".bat"))
                     app.exec("cmd /c start "+url);
+                else
+                    app.exec(url);
             }
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "No se ha podido abrir la aplicacion, asegúrate de que es un archivo ejecutable.",

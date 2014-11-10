@@ -14,7 +14,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class GestionAppModel  extends AbstractTableModel {
     ArrayList<Object[]> datos = new ArrayList<>();
-    String [] columns = {"Nombre", "Ruta", "Imagen"};
+    String [] columns = {"Nombre", "Ruta / Comando", "Imagen"};
     
     Class[] types = new Class[] {java.lang.String.class, java.lang.String.class, 
             java.lang.Integer.class};

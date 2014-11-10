@@ -96,7 +96,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="tabbedPanePrincipal" alignment="0" pref="712" max="32767" attributes="0"/>
+              <Component id="tabbedPanePrincipal" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -129,11 +129,11 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="scrollPaneTablaWeb" pref="393" max="32767" attributes="0"/>
+                                  <Component id="scrollPaneTablaWeb" pref="0" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="panelEditorWeb" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="panelBotonesWeb" max="32767" attributes="0"/>
+                              <Component id="panelBotonesWeb" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -169,14 +169,28 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnAnyadirWeb" min="-2" pref="128" max="-2" attributes="0"/>
-                              <EmptySpace pref="103" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="btnAnyadirWeb" min="-2" pref="128" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="93" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Component id="versionLabelWeb" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="btnIniciarWeb" max="32767" attributes="0"/>
                                   <Component id="btnModificarWeb" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
-                              <Component id="btnEliminarWeb" min="-2" pref="128" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
+                                      <Component id="btnEliminarWeb" min="-2" pref="128" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="labelRunningOsWeb" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -191,7 +205,11 @@
                                   <Component id="btnEliminarWeb" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="btnIniciarWeb" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="btnIniciarWeb" min="-2" max="-2" attributes="0"/>
+                                  <Component id="versionLabelWeb" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelRunningOsWeb" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -242,6 +260,26 @@
                         <Property name="text" type="java.lang.String" value="&#xa1; INICIAR !"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                           <Color id="Cursor de Mano"/>
+                        </Property>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="versionLabelWeb">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="DejaVu Sans" size="10" style="2"/>
+                        </Property>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="labelRunningOsWeb">
+                      <Properties>
+                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[64, 64]"/>
+                        </Property>
+                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[64, 64]"/>
+                        </Property>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[64, 64]"/>
                         </Property>
                       </Properties>
                     </Component>
@@ -512,12 +550,12 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="scrollPaneTablaApp" pref="417" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="scrollPaneTablaApp" pref="0" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="panelEditorApp" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="panelBotonesApp" alignment="0" max="32767" attributes="0"/>
+                              <Component id="panelBotonesApp" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -553,14 +591,28 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnAnyadirApp" min="-2" pref="128" max="-2" attributes="0"/>
-                              <EmptySpace pref="105" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="btnAnyadirApp" min="-2" pref="128" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="93" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Component id="versionLabelApp" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="btnIniciarApp" alignment="0" max="32767" attributes="0"/>
                                   <Component id="btnModificarApp" alignment="0" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
-                              <Component id="btnEliminarApp" min="-2" pref="128" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
+                                      <Component id="btnEliminarApp" min="-2" pref="128" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="labelRunningOsApp" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -575,7 +627,11 @@
                                   <Component id="btnEliminarApp" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="btnIniciarApp" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="btnIniciarApp" min="-2" max="-2" attributes="0"/>
+                                  <Component id="versionLabelApp" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelRunningOsApp" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -626,6 +682,26 @@
                         <Property name="text" type="java.lang.String" value="&#xa1; INICIAR !"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                           <Color id="Cursor de Mano"/>
+                        </Property>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="versionLabelApp">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="DejaVu Sans" size="10" style="2"/>
+                        </Property>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="labelRunningOsApp">
+                      <Properties>
+                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[64, 64]"/>
+                        </Property>
+                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[64, 64]"/>
+                        </Property>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[64, 64]"/>
                         </Property>
                       </Properties>
                     </Component>
@@ -746,7 +822,7 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="labelRutaApp">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Ruta aplicaci&#xf3;n"/>
+                        <Property name="text" type="java.lang.String" value="Comando o ruta aplicaci&#xf3;n."/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="labelImagenApp">
