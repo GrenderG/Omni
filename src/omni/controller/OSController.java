@@ -10,9 +10,9 @@ package omni.controller;
  * @author grender
  */
 public class OSController {
-    
+
     private static final String osName = System.getProperty("os.name").toLowerCase();
-    
+
     public static boolean isWindows() {
         return (osName.contains("win"));
     }
@@ -22,16 +22,16 @@ public class OSController {
     }
 
     public static boolean isUnix() {
-        return (osName.contains("nix") || 
-                osName.contains("nux") || 
-                osName.indexOf("aix") > 0 );
+        return (osName.contains("nix")
+                || osName.contains("nux")
+                || osName.contains("aix"));
     }
 
     public static boolean isSolaris() {
         return (osName.contains("sunos"));
     }
-    
-    public static String getOS(){
+
+    public static String getOS() {
         if (isWindows()) {
             return "Windows";
         } else if (isMac()) {

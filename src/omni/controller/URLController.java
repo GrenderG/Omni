@@ -16,18 +16,18 @@ import javax.swing.JOptionPane;
  * @author grender
  */
 public class URLController {
-    
+
     public static void openUrl(String url) {
-        
+
         try {
-            
+
             Desktop.getDesktop().browse(new URI(url));
-            
+
         } catch (IOException | URISyntaxException ex) {
-            JOptionPane.showMessageDialog(null, "Imposible abrir la URL, asegúrate de que está bien escrita.", 
+            JOptionPane.showMessageDialog(null, "Imposible abrir la URL, asegúrate de que está bien escrita.",
                     "Error al intentar abrir", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
     }
-    
+
 }
