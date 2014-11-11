@@ -14,14 +14,14 @@ import java.awt.datatransfer.StringSelection;
  * @author grender
  */
 public class ClipboardController {
-    
+
     private static final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-    
-    public void copyToClipboard(String text){
-        
+
+    public void copyToClipboard(String text) {
+
         StringSelection data = new StringSelection(text);
         clipboard.setContents(data, data);
-        
+
     }
-    
+
 }

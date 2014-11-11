@@ -8,10 +8,6 @@ package omni.visual;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -22,18 +18,18 @@ import javax.swing.JFrame;
 public class Login extends javax.swing.JFrame {
 
     private static final ImageIcon icon = new ImageIcon(Login.class.getResource("/res/icon.png"));
-    
+
     public Login() {
         initComponents();
 
         this.setIconImage(icon.getImage());
-               
+
         this.setLocationRelativeTo(null);
         this.setTitle("Omni | Login");
         this.jPanel1.setBackground(new Color(202, 238, 255));
         this.jPanel2.setBackground(new Color(202, 238, 255));
-        
-        this.jLabel3.addMouseListener(new MouseListener(){
+
+        this.jLabel3.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -44,30 +40,28 @@ public class Login extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                
+
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                
+
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                
+
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                
+
             }
-            
+
         });
-            
-        
-        
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

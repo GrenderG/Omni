@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package omni.visual;
 
 import java.awt.Color;
@@ -18,6 +17,8 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableRowSorter;
 import omni.controller.APPController;
 import omni.controller.ClipboardController;
 import omni.controller.OSController;
@@ -31,77 +32,112 @@ import omni.model.GestionWebModel;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-     private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
-     private JFileChooser jf = new JFileChooser();
-     
-     private final GestionWebModel webModel;
-     
-     private static boolean isImageWebEnabled = false;
-     private static int lastWebRowSelected;
-     private static boolean isModifyingWeb = false;
-     
-     private final GestionAppModel appModel;
-     
-     private static boolean isImageAppEnabled = false;
-     private static int lastAppRowSelected;
-     private static boolean isModifyingApp = false;
-     
+    private static final String currentVersion = "0.22";
+    private static final String runningOs = OSController.getOS();
+
+    private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
+    private JFileChooser jf = new JFileChooser();
+
+    private final GestionWebModel webModel;
+
+    private static boolean isImageWebEnabled = false;
+    private static int lastWebRowSelected;
+    private static boolean isModifyingWeb = false;
+
+    private final GestionAppModel appModel;
+
+    private static boolean isImageAppEnabled = false;
+    private static int lastAppRowSelected;
+    private static boolean isModifyingApp = false;
+
+    private static final Color BG_GENERAL_BLUE = new Color(202, 238, 255);
+    private static final Color BG_RESOURCE_LIGHT_BLUE = new Color(235, 248, 255);
+
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
-        
+
         initComponents();
-        
+
         this.setIconImage(icon.getImage());
-               
+
         this.setLocationRelativeTo(null);
         this.setTitle("Omni");
-        
+
         /*WEB*/
-        
+        this.versionLabelWeb.setText("Versión " + currentVersion);
+
+        this.labelRunningOsWeb.setToolTipText("Corriendo en " + runningOs);
+
+        if (runningOs.equals("Windows")) {
+            this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/windows.png")));
+        } else if (runningOs.equals("Linux")) {
+            this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/linux.png")));
+        } else if (runningOs.equals("OSx")) {
+            this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/osx.png")));
+        } else {
+            this.labelRunningOsWeb.setText("Unknown");
+        }
+
         this.tablaWeb.setModel(new GestionWebModel());
-        
-        this.webModel = ((GestionWebModel)MainWindow.this.tablaWeb.getModel());
-        
-        this.panelPrincipal.setBackground(new Color(202, 238, 255));
-        this.panelWeb.setBackground(new Color(202, 238, 255));
-        this.panelApp.setBackground(new Color(202, 238, 255));
-        this.panelBotonesWeb.setBackground(new Color(202, 238, 255));
-        this.panelEditorWeb.setBackground(new Color(202, 238, 255));
-        
-        this.panelImagenWeb.setBackground(new Color(235, 248, 255));
-        
+
+        this.webModel = ((GestionWebModel) MainWindow.this.tablaWeb.getModel());
+
+        this.panelPrincipal.setBackground(BG_GENERAL_BLUE);
+        this.panelWeb.setBackground(BG_GENERAL_BLUE);
+        this.panelApp.setBackground(BG_GENERAL_BLUE);
+        this.panelBotonesWeb.setBackground(BG_GENERAL_BLUE);
+        this.panelEditorWeb.setBackground(BG_GENERAL_BLUE);
+
+        this.panelImagenWeb.setBackground(BG_RESOURCE_LIGHT_BLUE);
+
         this.textFieldNombreWeb.setEditable(false);
         this.textFieldURLWeb.setEditable(false);
         this.btnOkWeb.setEnabled(false);
         this.btnCancelWeb.setEnabled(false);
         this.btnClipboardWeb.setEnabled(false);
         this.panelImagenWeb.setEnabled(false);
-        
-        this.btnIniciarWeb.addActionListener(new ActionListener(){
+
+        this.scrollPaneTablaWeb.getViewport().setBackground(BG_GENERAL_BLUE);
+
+        for (int i = 0; i < this.tablaWeb.getColumnCount(); i++) {
+            TableColumn cell = this.tablaWeb.getColumnModel().getColumn(i);
+            cell.setCellRenderer(new ColorRenderer());
+        }
+
+        TableRowSorter<GestionWebModel> webSorter
+                = new TableRowSorter<>((GestionWebModel) this.tablaWeb.getModel());
+
+        this.tablaWeb.setRowSorter(webSorter);
+
+        this.btnIniciarWeb.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (tablaWeb.getSelectedRow() != -1){
+                if (tablaWeb.getSelectedRow() != -1) {
 
                     URLController.openUrl((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
 
-                    }else{
-                        JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
-                        "Error al iniciar", JOptionPane.ERROR_MESSAGE);
-                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.",
+                            "Error al iniciar", JOptionPane.ERROR_MESSAGE);
+                }
             }
-            
+
         });
-        
-        this.tablaWeb.addMouseListener(new MouseListener(){
+
+        this.tablaWeb.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent me) {
 
+                if (me.getClickCount() == 2) {
+                    URLController.openUrl((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
+                }
+
                 btnClipboardWeb.setEnabled(true);
-                
+
                 textFieldNombreWeb.setText((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 0));
                 textFieldURLWeb.setText((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
 
@@ -119,42 +155,43 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent me) {
-                
+
             }
 
             @Override
             public void mouseReleased(MouseEvent me) {
-                
+
             }
 
             @Override
             public void mouseEntered(MouseEvent me) {
-                
+
             }
 
             @Override
             public void mouseExited(MouseEvent me) {
-                
+
             }
-            
+
         });
-        
-        this.btnAnyadirWeb.addActionListener(new ActionListener(){
+
+        this.btnAnyadirWeb.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                
+
                 textFieldNombreWeb.setText("");
                 textFieldURLWeb.setText("");
-                labelShowImagenWeb.setIcon(null);
-                
+                labelShowImagenWeb.setIcon(
+                        new ImageIcon(MainWindow.class.getResource("/res/icon.png")));
+
                 textFieldNombreWeb.setEditable(true);
                 textFieldURLWeb.setEditable(true);
                 panelImagenWeb.setEnabled(true);
                 btnOkWeb.setEnabled(true);
                 btnCancelWeb.setEnabled(true);
                 isImageWebEnabled = true;
-                
+
                 btnAnyadirWeb.setEnabled(false);
                 btnIniciarWeb.setEnabled(false);
                 btnModificarWeb.setEnabled(false);
@@ -162,24 +199,24 @@ public class MainWindow extends javax.swing.JFrame {
                 btnClipboardWeb.setEnabled(false);
                 tablaWeb.setEnabled(false);
                 tabbedPanePrincipal.setEnabled(false);
-                
+
             }
-            
+
         });
-        
-        this.btnEliminarWeb.addActionListener(new ActionListener(){
+
+        this.btnEliminarWeb.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                
-                if (tablaWeb.getSelectedRow() != -1){
-                    
+
+                if (tablaWeb.getSelectedRow() != -1) {
+
                     if (JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar "
-                            +webModel.getValueAt(tablaWeb.getSelectedRow(), 0)+"?", 
-                            "Eliminar", JOptionPane.YES_NO_OPTION) == 0){
-                    
+                            + webModel.getValueAt(tablaWeb.getSelectedRow(), 0) + "?",
+                            "Eliminar", JOptionPane.YES_NO_OPTION) == 0) {
+
                         webModel.removeRow(tablaWeb.getSelectedRow());
-                        
+
                         textFieldNombreWeb.setText("");
                         textFieldURLWeb.setText("");
                         labelShowImagenWeb.setIcon(null);
@@ -193,15 +230,15 @@ public class MainWindow extends javax.swing.JFrame {
                         btnClipboardWeb.setEnabled(false);
                         isImageWebEnabled = false;
                     }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
-                    "Error al eliminar", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.",
+                            "Error al eliminar", JOptionPane.ERROR_MESSAGE);
                 }
             }
-            
+
         });
-        
-        this.btnCancelWeb.addActionListener(new ActionListener(){
+
+        this.btnCancelWeb.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -209,7 +246,7 @@ public class MainWindow extends javax.swing.JFrame {
                 textFieldURLWeb.setText("");
                 labelShowImagenWeb.setIcon(null);
                 tablaWeb.clearSelection();
-                
+
                 textFieldNombreWeb.setEditable(false);
                 textFieldURLWeb.setEditable(false);
                 panelImagenWeb.setEnabled(false);
@@ -217,25 +254,25 @@ public class MainWindow extends javax.swing.JFrame {
                 btnCancelWeb.setEnabled(false);
                 btnClipboardWeb.setEnabled(false);
                 isImageWebEnabled = false;
-                
+
                 btnAnyadirWeb.setEnabled(true);
                 btnIniciarWeb.setEnabled(true);
                 btnModificarWeb.setEnabled(true);
                 btnEliminarWeb.setEnabled(true);
                 tablaWeb.setEnabled(true);
                 tabbedPanePrincipal.setEnabled(true);
-                
+
                 isModifyingWeb = false;
             }
-            
+
         });
-        
-        this.panelImagenWeb.addMouseListener(new MouseListener(){
-            
+
+        this.panelImagenWeb.addMouseListener(new MouseListener() {
+
             @Override
             public void mouseClicked(MouseEvent e) {
-                
-                if (isImageWebEnabled){
+
+                if (isImageWebEnabled) {
                     if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 
                         File rutaAbs = jf.getSelectedFile().getAbsoluteFile();
@@ -254,46 +291,46 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                
+
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                
+
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                if (isImageWebEnabled)
+                if (isImageWebEnabled) {
                     MainWindow.this.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                }
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if (isImageWebEnabled)
+                if (isImageWebEnabled) {
                     MainWindow.this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                }
             }
-            
-        });
-        
 
-        
-        this.btnModificarWeb.addActionListener(new ActionListener(){
+        });
+
+        this.btnModificarWeb.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent ae) {               
-                
-                if (tablaWeb.getSelectedRow() != -1){
-                    
+            public void actionPerformed(ActionEvent ae) {
+
+                if (tablaWeb.getSelectedRow() != -1) {
+
                     panelImagenWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                    
-                    textFieldNombreWeb.setEditable(true);                   
+
+                    textFieldNombreWeb.setEditable(true);
                     textFieldURLWeb.setEditable(true);
                     panelImagenWeb.setEnabled(true);
                     btnOkWeb.setEnabled(true);
                     btnCancelWeb.setEnabled(true);
                     isImageWebEnabled = true;
-                    
+
                     btnAnyadirWeb.setEnabled(false);
                     btnIniciarWeb.setEnabled(false);
                     btnModificarWeb.setEnabled(false);
@@ -301,38 +338,38 @@ public class MainWindow extends javax.swing.JFrame {
                     lastWebRowSelected = tablaWeb.getSelectedRow();
                     tablaWeb.setEnabled(false);
                     tabbedPanePrincipal.setEnabled(false);
-                    
+
                     textFieldNombreWeb.setText((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 0));
                     textFieldURLWeb.setText((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
 
                     File rutaAbs = new File((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 2));
 
                     rutaAbs = rutaAbs.getAbsoluteFile();
-                    
+
                     try {
                         labelShowImagenWeb.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
                     } catch (MalformedURLException ex) {
                         Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                     isModifyingWeb = true;
-                    
-                }else{
-                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
-                    "Error al modificar", JOptionPane.ERROR_MESSAGE);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.",
+                            "Error al modificar", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-        
-        this.btnOkWeb.addActionListener(new ActionListener(){
+
+        this.btnOkWeb.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent ae) {
+            public void actionPerformed(ActionEvent ae) {               
                 
-                if (!textFieldURLWeb.getText().equals("") 
+                if (!textFieldURLWeb.getText().equals("")
                         && !textFieldNombreWeb.getText().equals("")
-                        && labelShowImagenWeb.getIcon() != null){
-                
+                        && labelShowImagenWeb.getIcon() != null) {
+
                     textFieldNombreWeb.setEditable(false);
                     textFieldURLWeb.setEditable(false);
                     panelImagenWeb.setEnabled(false);
@@ -340,21 +377,24 @@ public class MainWindow extends javax.swing.JFrame {
                     btnCancelWeb.setEnabled(false);
                     isImageWebEnabled = false;
 
-                    if (!textFieldURLWeb.getText().contains("://"))
-                        textFieldURLWeb.setText("http://"+textFieldURLWeb.getText());
-                    
-                    if (isModifyingWeb)
+                    if (!textFieldURLWeb.getText().contains("://")) {
+                        textFieldURLWeb.setText("http://" + textFieldURLWeb.getText());
+                    }
+
+                    if (isModifyingWeb) {
                         webModel.removeRow(lastWebRowSelected);
-                    
-                    if (OSController.isUnix() || OSController.isMac())                   
-                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(), 
+                    }
+
+                    if (OSController.isUnix() || OSController.isMac()) {
+                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(),
                                 labelShowImagenWeb.getIcon().toString().substring(5, labelShowImagenWeb.getIcon().toString().length()));
-                    else if (OSController.isWindows())
-                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(), 
+                    } else if (OSController.isWindows()) {
+                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(),
                                 labelShowImagenWeb.getIcon().toString().substring(6, labelShowImagenWeb.getIcon().toString().length()));
-                    else
-                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(), 
+                    } else {
+                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(),
                                 labelShowImagenWeb.getIcon().toString());
+                    }
 
                     btnAnyadirWeb.setEnabled(true);
                     btnIniciarWeb.setEnabled(true);
@@ -362,48 +402,58 @@ public class MainWindow extends javax.swing.JFrame {
                     btnEliminarWeb.setEnabled(true);
                     tablaWeb.setEnabled(true);
                     tabbedPanePrincipal.setEnabled(true);
-                    
+
                     textFieldNombreWeb.setText("");
                     textFieldURLWeb.setText("");
                     labelShowImagenWeb.setIcon(null);
                     tablaWeb.clearSelection();
-                    
+
                     isModifyingWeb = false;
-                    
-                }else{
+
+                } else {
                     JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos.",
-                        "Imposible añadir web", JOptionPane.ERROR_MESSAGE);
+                            "Imposible añadir web", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-        
-        this.btnClipboardWeb.addActionListener(new ActionListener(){
+
+        this.btnClipboardWeb.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (tablaWeb.getSelectedRow() != -1)                
+                if (tablaWeb.getSelectedRow() != -1) {
                     new ClipboardController()
                             .copyToClipboard((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 2));
+                }
             }
-            
+
         });
-        
+
         /*APP*/
-        
-        if (OSController.isUnix()){
-            this.labelRutaApp.setText("Comando o ruta aplicación.");
-        }
-        
+        this.versionLabelApp.setText("Versión " + currentVersion);
+
         this.tablaApp.setModel(new GestionAppModel());
-        
-        this.appModel = ((GestionAppModel)MainWindow.this.tablaApp.getModel());
-        
-        this.panelApp.setBackground(new Color(202, 238, 255));
-        this.panelBotonesApp.setBackground(new Color(202, 238, 255));
-        this.panelEditorApp.setBackground(new Color(202, 238, 255));
-        
-        this.panelImagenApp.setBackground(new Color(235, 248, 255));
-        
+
+        this.labelRunningOsApp.setToolTipText("Corriendo en " + runningOs);
+
+        if (runningOs.equals("Windows")) {
+            this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/windows.png")));
+        } else if (runningOs.equals("Linux")) {
+            this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/linux.png")));
+        } else if (runningOs.equals("OSx")) {
+            this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/osx.png")));
+        } else {
+            this.labelRunningOsApp.setText("Unknown");
+        }
+
+        this.appModel = ((GestionAppModel) MainWindow.this.tablaApp.getModel());
+
+        this.panelApp.setBackground(BG_GENERAL_BLUE);
+        this.panelBotonesApp.setBackground(BG_GENERAL_BLUE);
+        this.panelEditorApp.setBackground(BG_GENERAL_BLUE);
+
+        this.panelImagenApp.setBackground(BG_RESOURCE_LIGHT_BLUE);
+
         this.textFieldNombreApp.setEditable(false);
         this.textFieldRutaApp.setEditable(false);
         this.btnRutaApp.setEnabled(false);
@@ -411,43 +461,59 @@ public class MainWindow extends javax.swing.JFrame {
         this.btnCancelApp.setEnabled(false);
         this.btnClipboardApp.setEnabled(false);
         this.panelImagenApp.setEnabled(false);
-        
-        this.btnRutaApp.addActionListener(new ActionListener(){
+
+        this.scrollPaneTablaApp.getViewport().setBackground(BG_GENERAL_BLUE);
+
+        for (int i = 0; i < this.tablaApp.getColumnCount(); i++) {
+            TableColumn cell = this.tablaApp.getColumnModel().getColumn(i);
+            cell.setCellRenderer(new ColorRenderer());
+        }
+
+        TableRowSorter<GestionAppModel> appSorter
+                = new TableRowSorter<>((GestionAppModel) this.tablaApp.getModel());
+
+        this.tablaApp.setRowSorter(appSorter);
+
+        this.btnRutaApp.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 
-                        textFieldRutaApp.setText(jf.getSelectedFile().getAbsoluteFile().getAbsolutePath());
-                        
+                    textFieldRutaApp.setText(jf.getSelectedFile().getAbsoluteFile().getAbsolutePath());
+
                 }
             }
-            
+
         });
-        
-        this.btnIniciarApp.addActionListener(new ActionListener(){
+
+        this.btnIniciarApp.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (tablaApp.getSelectedRow() != -1){
+                if (tablaApp.getSelectedRow() != -1) {
 
                     APPController.openApp((String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
 
-                    }else{
-                        JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
-                        "Error al iniciar", JOptionPane.ERROR_MESSAGE);
-                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.",
+                            "Error al iniciar", JOptionPane.ERROR_MESSAGE);
+                }
             }
-            
+
         });
-        
-        this.tablaApp.addMouseListener(new MouseListener(){
+
+        this.tablaApp.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent me) {
 
+                if (me.getClickCount() == 2) {
+                    APPController.openApp((String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
+                }
+
                 btnClipboardApp.setEnabled(true);
-                
+
                 textFieldNombreApp.setText((String) appModel.getValueAt(tablaApp.getSelectedRow(), 0));
                 textFieldRutaApp.setText((String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
 
@@ -465,35 +531,36 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent me) {
-                
+
             }
 
             @Override
             public void mouseReleased(MouseEvent me) {
-                
+
             }
 
             @Override
             public void mouseEntered(MouseEvent me) {
-                
+
             }
 
             @Override
             public void mouseExited(MouseEvent me) {
-                
+
             }
-            
+
         });
-        
-        this.btnAnyadirApp.addActionListener(new ActionListener(){
+
+        this.btnAnyadirApp.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                
+
                 textFieldNombreApp.setText("");
                 textFieldRutaApp.setText("");
-                labelShowImagenApp.setIcon(null);
-                
+                labelShowImagenApp.setIcon(
+                        new ImageIcon(MainWindow.class.getResource("/res/icon.png")));
+
                 textFieldNombreApp.setEditable(true);
                 textFieldRutaApp.setEditable(true);
                 panelImagenApp.setEnabled(true);
@@ -501,7 +568,7 @@ public class MainWindow extends javax.swing.JFrame {
                 btnOkApp.setEnabled(true);
                 btnCancelApp.setEnabled(true);
                 isImageAppEnabled = true;
-                
+
                 btnAnyadirApp.setEnabled(false);
                 btnIniciarApp.setEnabled(false);
                 btnModificarApp.setEnabled(false);
@@ -509,24 +576,24 @@ public class MainWindow extends javax.swing.JFrame {
                 btnClipboardApp.setEnabled(false);
                 tablaApp.setEnabled(false);
                 tabbedPanePrincipal.setEnabled(false);
-                
+
             }
-            
+
         });
-        
-        this.btnEliminarApp.addActionListener(new ActionListener(){
+
+        this.btnEliminarApp.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                
-                if (tablaApp.getSelectedRow() != -1){
-                    
+
+                if (tablaApp.getSelectedRow() != -1) {
+
                     if (JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar "
-                            +appModel.getValueAt(tablaApp.getSelectedRow(), 0)+"?", 
-                            "Eliminar", JOptionPane.YES_NO_OPTION) == 0){
-                    
+                            + appModel.getValueAt(tablaApp.getSelectedRow(), 0) + "?",
+                            "Eliminar", JOptionPane.YES_NO_OPTION) == 0) {
+
                         appModel.removeRow(tablaApp.getSelectedRow());
-                        
+
                         textFieldNombreApp.setText("");
                         textFieldRutaApp.setText("");
                         labelShowImagenApp.setIcon(null);
@@ -541,15 +608,15 @@ public class MainWindow extends javax.swing.JFrame {
                         btnClipboardApp.setEnabled(false);
                         isImageAppEnabled = false;
                     }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
-                    "Error al eliminar", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.",
+                            "Error al eliminar", JOptionPane.ERROR_MESSAGE);
                 }
             }
-            
+
         });
-        
-        this.btnCancelApp.addActionListener(new ActionListener(){
+
+        this.btnCancelApp.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -557,7 +624,7 @@ public class MainWindow extends javax.swing.JFrame {
                 textFieldRutaApp.setText("");
                 labelShowImagenApp.setIcon(null);
                 tablaApp.clearSelection();
-                
+
                 textFieldNombreApp.setEditable(false);
                 textFieldRutaApp.setEditable(false);
                 panelImagenApp.setEnabled(false);
@@ -566,25 +633,25 @@ public class MainWindow extends javax.swing.JFrame {
                 btnCancelApp.setEnabled(false);
                 btnClipboardApp.setEnabled(false);
                 isImageAppEnabled = false;
-                
+
                 btnAnyadirApp.setEnabled(true);
                 btnIniciarApp.setEnabled(true);
                 btnModificarApp.setEnabled(true);
                 btnEliminarApp.setEnabled(true);
                 tablaApp.setEnabled(true);
                 tabbedPanePrincipal.setEnabled(true);
-                
+
                 isModifyingApp = false;
             }
-            
+
         });
-        
-        this.panelImagenApp.addMouseListener(new MouseListener(){
-            
+
+        this.panelImagenApp.addMouseListener(new MouseListener() {
+
             @Override
             public void mouseClicked(MouseEvent e) {
-                
-                if (isImageAppEnabled){
+
+                if (isImageAppEnabled) {
                     if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 
                         File rutaAbs = jf.getSelectedFile().getAbsoluteFile();
@@ -603,47 +670,47 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                
+
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                
+
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                if (isImageAppEnabled)
+                if (isImageAppEnabled) {
                     MainWindow.this.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                }
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if (isImageAppEnabled)
+                if (isImageAppEnabled) {
                     MainWindow.this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                }
             }
-            
-        });
-        
 
-        
-        this.btnModificarApp.addActionListener(new ActionListener(){
+        });
+
+        this.btnModificarApp.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent ae) {               
-                
-                if (tablaApp.getSelectedRow() != -1){
-                    
+            public void actionPerformed(ActionEvent ae) {
+
+                if (tablaApp.getSelectedRow() != -1) {
+
                     panelImagenApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                    
-                    textFieldNombreApp.setEditable(true);                   
+
+                    textFieldNombreApp.setEditable(true);
                     textFieldRutaApp.setEditable(true);
                     panelImagenApp.setEnabled(true);
                     btnRutaApp.setEnabled(true);
                     btnOkApp.setEnabled(true);
                     btnCancelApp.setEnabled(true);
                     isImageAppEnabled = true;
-                    
+
                     btnAnyadirApp.setEnabled(false);
                     btnIniciarApp.setEnabled(false);
                     btnModificarApp.setEnabled(false);
@@ -651,38 +718,38 @@ public class MainWindow extends javax.swing.JFrame {
                     lastAppRowSelected = tablaApp.getSelectedRow();
                     tablaApp.setEnabled(false);
                     tabbedPanePrincipal.setEnabled(false);
-                    
+
                     textFieldNombreApp.setText((String) appModel.getValueAt(tablaApp.getSelectedRow(), 0));
                     textFieldRutaApp.setText((String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
 
                     File rutaAbs = new File((String) appModel.getValueAt(tablaApp.getSelectedRow(), 2));
 
                     rutaAbs = rutaAbs.getAbsoluteFile();
-                    
+
                     try {
                         labelShowImagenApp.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
                     } catch (MalformedURLException ex) {
                         Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                     isModifyingApp = true;
-                    
-                }else{
-                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.", 
-                    "Error al modificar", JOptionPane.ERROR_MESSAGE);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar algo.",
+                            "Error al modificar", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-        
-        this.btnOkApp.addActionListener(new ActionListener(){
+
+        this.btnOkApp.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                
-                if (!textFieldRutaApp.getText().equals("") 
+
+                if (!textFieldRutaApp.getText().equals("")
                         && !textFieldNombreApp.getText().equals("")
-                        && labelShowImagenApp.getIcon() != null){
-                
+                        && labelShowImagenApp.getIcon() != null) {
+
                     textFieldNombreApp.setEditable(false);
                     textFieldRutaApp.setEditable(false);
                     panelImagenApp.setEnabled(false);
@@ -690,24 +757,25 @@ public class MainWindow extends javax.swing.JFrame {
                     btnOkApp.setEnabled(false);
                     btnCancelApp.setEnabled(false);
                     isImageAppEnabled = false;
-                    
+
                     /*
-                    if (!textFieldRutaApp.getText().contains("://"))
-                        textFieldURLWeb.setText("http://"+textFieldURLWeb.getText());
-                    */
-                    
-                    if (isModifyingApp)
+                     if (!textFieldRutaApp.getText().contains("://"))
+                     textFieldURLWeb.setText("http://"+textFieldURLWeb.getText());
+                     */
+                    if (isModifyingApp) {
                         appModel.removeRow(lastAppRowSelected);
-                    
-                    if (OSController.isUnix() || OSController.isMac())                   
-                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(), 
+                    }
+
+                    if (OSController.isUnix() || OSController.isMac()) {
+                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(),
                                 labelShowImagenApp.getIcon().toString().substring(5, labelShowImagenApp.getIcon().toString().length()));
-                    else if (OSController.isWindows())
-                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(), 
+                    } else if (OSController.isWindows()) {
+                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(),
                                 labelShowImagenApp.getIcon().toString().substring(6, labelShowImagenApp.getIcon().toString().length()));
-                    else
-                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(), 
+                    } else {
+                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(),
                                 labelShowImagenApp.getIcon().toString());
+                    }
 
                     btnAnyadirApp.setEnabled(true);
                     btnIniciarApp.setEnabled(true);
@@ -715,32 +783,33 @@ public class MainWindow extends javax.swing.JFrame {
                     btnEliminarApp.setEnabled(true);
                     tablaApp.setEnabled(true);
                     tabbedPanePrincipal.setEnabled(true);
-                    
+
                     textFieldNombreApp.setText("");
                     textFieldRutaApp.setText("");
                     labelShowImagenApp.setIcon(null);
                     tablaApp.clearSelection();
-                    
+
                     isModifyingApp = false;
-                    
-                }else{
+
+                } else {
                     JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos.",
-                        "Imposible añadir web", JOptionPane.ERROR_MESSAGE);
+                            "Imposible añadir web", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-        
-        this.btnClipboardApp.addActionListener(new ActionListener(){
+
+        this.btnClipboardApp.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (tablaApp.getSelectedRow() != -1)                
+                if (tablaApp.getSelectedRow() != -1) {
                     new ClipboardController()
                             .copyToClipboard((String) appModel.getValueAt(tablaApp.getSelectedRow(), 2));
+                }
             }
-            
+
         });
-        
+
     }
 
     /**
@@ -760,6 +829,8 @@ public class MainWindow extends javax.swing.JFrame {
         btnModificarWeb = new javax.swing.JButton();
         btnEliminarWeb = new javax.swing.JButton();
         btnIniciarWeb = new javax.swing.JButton();
+        versionLabelWeb = new javax.swing.JLabel();
+        labelRunningOsWeb = new javax.swing.JLabel();
         panelEditorWeb = new javax.swing.JPanel();
         textFieldNombreWeb = new javax.swing.JTextField();
         textFieldURLWeb = new javax.swing.JTextField();
@@ -779,6 +850,8 @@ public class MainWindow extends javax.swing.JFrame {
         btnModificarApp = new javax.swing.JButton();
         btnEliminarApp = new javax.swing.JButton();
         btnIniciarApp = new javax.swing.JButton();
+        versionLabelApp = new javax.swing.JLabel();
+        labelRunningOsApp = new javax.swing.JLabel();
         panelEditorApp = new javax.swing.JPanel();
         textFieldNombreApp = new javax.swing.JTextField();
         textFieldRutaApp = new javax.swing.JTextField();
@@ -830,19 +903,34 @@ public class MainWindow extends javax.swing.JFrame {
         btnIniciarWeb.setText("¡ INICIAR !");
         btnIniciarWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        versionLabelWeb.setFont(new java.awt.Font("DejaVu Sans", 2, 10)); // NOI18N
+
+        labelRunningOsWeb.setMaximumSize(new java.awt.Dimension(64, 64));
+        labelRunningOsWeb.setMinimumSize(new java.awt.Dimension(64, 64));
+        labelRunningOsWeb.setPreferredSize(new java.awt.Dimension(64, 64));
+
         javax.swing.GroupLayout panelBotonesWebLayout = new javax.swing.GroupLayout(panelBotonesWeb);
         panelBotonesWeb.setLayout(panelBotonesWebLayout);
         panelBotonesWebLayout.setHorizontalGroup(
             panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBotonesWebLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnAnyadirWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
+                .addGroup(panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBotonesWebLayout.createSequentialGroup()
+                        .addComponent(btnAnyadirWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 93, Short.MAX_VALUE))
+                    .addComponent(versionLabelWeb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnIniciarWeb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnModificarWeb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(93, 93, 93)
-                .addComponent(btnEliminarWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBotonesWebLayout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addComponent(btnEliminarWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBotonesWebLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelRunningOsWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelBotonesWebLayout.setVerticalGroup(
@@ -854,7 +942,10 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(btnModificarWeb)
                     .addComponent(btnEliminarWeb))
                 .addGap(18, 18, 18)
-                .addComponent(btnIniciarWeb)
+                .addGroup(panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnIniciarWeb)
+                    .addComponent(versionLabelWeb)
+                    .addComponent(labelRunningOsWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -995,7 +1086,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(panelWebLayout.createSequentialGroup()
                 .addGroup(panelWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelWebLayout.createSequentialGroup()
-                        .addComponent(scrollPaneTablaWeb, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                        .addComponent(scrollPaneTablaWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelEditorWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(panelBotonesWeb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1034,19 +1125,34 @@ public class MainWindow extends javax.swing.JFrame {
         btnIniciarApp.setText("¡ INICIAR !");
         btnIniciarApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        versionLabelApp.setFont(new java.awt.Font("DejaVu Sans", 2, 10)); // NOI18N
+
+        labelRunningOsApp.setMaximumSize(new java.awt.Dimension(64, 64));
+        labelRunningOsApp.setMinimumSize(new java.awt.Dimension(64, 64));
+        labelRunningOsApp.setPreferredSize(new java.awt.Dimension(64, 64));
+
         javax.swing.GroupLayout panelBotonesAppLayout = new javax.swing.GroupLayout(panelBotonesApp);
         panelBotonesApp.setLayout(panelBotonesAppLayout);
         panelBotonesAppLayout.setHorizontalGroup(
             panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBotonesAppLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnAnyadirApp, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                .addGroup(panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBotonesAppLayout.createSequentialGroup()
+                        .addComponent(btnAnyadirApp, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 93, Short.MAX_VALUE))
+                    .addComponent(versionLabelApp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnIniciarApp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnModificarApp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(93, 93, 93)
-                .addComponent(btnEliminarApp, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBotonesAppLayout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addComponent(btnEliminarApp, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBotonesAppLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelRunningOsApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelBotonesAppLayout.setVerticalGroup(
@@ -1058,7 +1164,10 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(btnModificarApp)
                     .addComponent(btnEliminarApp))
                 .addGap(18, 18, 18)
-                .addComponent(btnIniciarApp)
+                .addGroup(panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnIniciarApp)
+                    .addComponent(versionLabelApp)
+                    .addComponent(labelRunningOsApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1074,7 +1183,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         labelNombreApp.setText("Nombre");
 
-        labelRutaApp.setText("Ruta aplicación");
+        labelRutaApp.setText("Comando o ruta aplicación.");
 
         labelImagenApp.setText("Imagen");
 
@@ -1206,7 +1315,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(panelAppLayout.createSequentialGroup()
                 .addGroup(panelAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelAppLayout.createSequentialGroup()
-                        .addComponent(scrollPaneTablaApp, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
+                        .addComponent(scrollPaneTablaApp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelEditorApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(panelBotonesApp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1230,7 +1339,7 @@ public class MainWindow extends javax.swing.JFrame {
         panelPrincipal.setLayout(panelPrincipalLayout);
         panelPrincipalLayout.setHorizontalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPanePrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
+            .addComponent(tabbedPanePrincipal)
         );
         panelPrincipalLayout.setVerticalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1240,6 +1349,11 @@ public class MainWindow extends javax.swing.JFrame {
         jMenu1.setText("Inicio");
 
         jMenuItem1.setText("Salir");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
@@ -1277,6 +1391,10 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        System.exit(0);        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1293,24 +1411,23 @@ public class MainWindow extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException |
+                InstantiationException |
+                IllegalAccessException |
+                javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                
+
                 new MainWindow().setVisible(true);
-                
+
             }
         });
     }
@@ -1343,6 +1460,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel labelImagenWeb;
     private javax.swing.JLabel labelNombreApp;
     private javax.swing.JLabel labelNombreWeb;
+    private javax.swing.JLabel labelRunningOsApp;
+    private javax.swing.JLabel labelRunningOsWeb;
     private javax.swing.JLabel labelRutaApp;
     private javax.swing.JLabel labelShowImagenApp;
     private javax.swing.JLabel labelShowImagenWeb;
@@ -1365,5 +1484,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField textFieldNombreWeb;
     private javax.swing.JTextField textFieldRutaApp;
     private javax.swing.JTextField textFieldURLWeb;
+    private javax.swing.JLabel versionLabelApp;
+    private javax.swing.JLabel versionLabelWeb;
     // End of variables declaration//GEN-END:variables
 }
