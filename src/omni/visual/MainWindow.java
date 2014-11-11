@@ -32,7 +32,7 @@ import omni.model.GestionWebModel;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-    private static final String currentVersion = "0.21";
+    private static final String currentVersion = "0.22";
     private static final String runningOs = OSController.getOS();
 
     private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
