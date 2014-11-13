@@ -23,6 +23,7 @@ import omni.controller.APPController;
 import omni.controller.ClipboardController;
 import omni.controller.OSController;
 import omni.controller.URLController;
+import omni.controller.User;
 import omni.model.GestionAppModel;
 import omni.model.GestionWebModel;
 
@@ -52,6 +53,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     private static final Color BG_GENERAL_BLUE = new Color(202, 238, 255);
     private static final Color BG_RESOURCE_LIGHT_BLUE = new Color(235, 248, 255);
+    
+    private static User actualUser;
 
     /**
      * Creates new form MainWindow
@@ -59,7 +62,9 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
 
         initComponents();
-
+        
+        actualUser = actualUser.getUser();
+        
         this.setIconImage(icon.getImage());
 
         this.setLocationRelativeTo(null);
@@ -365,6 +370,8 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent ae) {               
+                String nombre, url, imagePath;
+                
                 
                 if (!textFieldURLWeb.getText().equals("")
                         && !textFieldNombreWeb.getText().equals("")
@@ -386,8 +393,12 @@ public class MainWindow extends javax.swing.JFrame {
                     }
 
                     if (OSController.isUnix() || OSController.isMac()) {
-                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(),
-                                labelShowImagenWeb.getIcon().toString().substring(5, labelShowImagenWeb.getIcon().toString().length()));
+                        nombre = textFieldNombreWeb.getText();
+                        url = textFieldURLWeb.getText();
+                        imagePath = labelShowImagenWeb.getIcon().toString().substring(5, labelShowImagenWeb.getIcon().toString().length());
+                        webModel.addRow(nombre, url, imagePath);
+                        actualUser.setAcceso("web", nombre, url, imagePath);
+                        
                     } else if (OSController.isWindows()) {
                         webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(),
                                 labelShowImagenWeb.getIcon().toString().substring(6, labelShowImagenWeb.getIcon().toString().length()));
