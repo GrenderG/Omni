@@ -5,6 +5,7 @@
  */
 package omni.controller;
 
+import java.awt.Desktop;
 import java.io.File;
 import javax.swing.JOptionPane;
 
@@ -24,7 +25,7 @@ public class APPController {
                     app.exec("chmod +x " + url);
                     app.exec(url);
                 } else {
-                    app.exec(url);
+                    Desktop.getDesktop().open(new File(url));
                 }
             } else {
                 if (url.contains(".exe")) {
@@ -34,7 +35,7 @@ public class APPController {
                 } else if (url.contains(".bat")) {
                     app.exec("cmd /c start " + url);
                 } else {
-                    app.exec(url);
+                    Desktop.getDesktop().open(new File(url));
                 }
             }
         } catch (Exception e) {

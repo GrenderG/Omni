@@ -407,6 +407,13 @@ public class MainWindow extends javax.swing.JFrame {
                     }
 
                     if (isModifyingWeb) {
+                        
+                        actualUser.removeAcceso("web", webModel.getValueAt(lastWebRowSelected, 0).toString(), 
+                        webModel.getValueAt(lastWebRowSelected, 1).toString(), 
+                        webModel.getValueAt(lastWebRowSelected, 2).toString());
+                        
+                        wtjson.updateElement(actualUser);
+                        
                         webModel.removeRow(lastWebRowSelected);
                     }
 
@@ -415,7 +422,7 @@ public class MainWindow extends javax.swing.JFrame {
                         url = textFieldURLWeb.getText();
                         imagePath = labelShowImagenWeb.getIcon().toString()
                                 .substring(5, labelShowImagenWeb.getIcon().toString().length());
-                        
+
                         webModel.addRow(nombre, url, imagePath);
 
                                                 
@@ -812,11 +819,14 @@ public class MainWindow extends javax.swing.JFrame {
                     btnCancelApp.setEnabled(false);
                     isImageAppEnabled = false;
 
-                    /*
-                     if (!textFieldRutaApp.getText().contains("://"))
-                     textFieldURLWeb.setText("http://"+textFieldURLWeb.getText());
-                     */
                     if (isModifyingApp) {
+                                                                        
+                        actualUser.removeAcceso("app", appModel.getValueAt(lastAppRowSelected, 0).toString(), 
+                        appModel.getValueAt(lastAppRowSelected, 1).toString(), 
+                        appModel.getValueAt(lastAppRowSelected, 2).toString());
+                        
+                        wtjson.updateElement(actualUser);
+                        
                         appModel.removeRow(lastAppRowSelected);
                     }
 
