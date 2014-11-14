@@ -434,7 +434,9 @@ public class MainWindow extends javax.swing.JFrame {
                                 .substring(5, labelShowImagenWeb.getIcon().toString().length());
 
                         webModel.addRow(nombre, url, imagePath);
-
+                        actualUser.setAcceso("web", nombre, url, imagePath);
+                        wtjson.updateElement(actualUser, false);
+                        
                     } else if (OSController.isWindows()) {
                         nombre = textFieldNombreWeb.getText();
                         url = textFieldURLWeb.getText();
@@ -854,13 +856,15 @@ public class MainWindow extends javax.swing.JFrame {
                                 .substring(5, labelShowImagenApp.getIcon().toString().length());
 
                         appModel.addRow(nombre, action, imagePath);
+                        actualUser.setAcceso("app", nombre, action, imagePath);
+                        wtjson.updateElement(actualUser, false);
 
                     } else if (OSController.isWindows()) {
                         nombre = textFieldNombreApp.getText();
                         action = textFieldRutaApp.getText();
                         imagePath = labelShowImagenApp.getIcon().toString()
                                 .substring(6, labelShowImagenApp.getIcon().toString().length());
-
+                        
                         appModel.addRow(nombre, action, imagePath);
                         actualUser.setAcceso("app", nombre, action, imagePath);
                         wtjson.updateElement(actualUser, false);
