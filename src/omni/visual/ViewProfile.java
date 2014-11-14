@@ -67,7 +67,7 @@ public class ViewProfile extends javax.swing.JFrame {
 
         while (nameEnum.hasMoreElements()) {
             this.jTextArea1.setText(this.jTextArea1.getText() + "· " + nameEnum.nextElement()
-                    + " ha sido abierto " + timesEnum.nextElement() + " vece(s).\n");
+                    + " ha sido abierto " + timesEnum.nextElement() + " vez / veces.\n");
         }
 
         this.textFieldNombre.setText(actualUser.getNombre());
