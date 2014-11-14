@@ -16,7 +16,6 @@ public class User {
     private String nombre;
     private String pass;
     private ArrayList<String[]> accesos = new ArrayList<>();
-    private static User actualUser;
     
     public User(){
         
@@ -25,14 +24,31 @@ public class User {
     public User(String nombre, String pass) {
         this.nombre = nombre;
         this.pass = pass;
-        actualUser = this;
     }
 
     public void setAcceso(String tipo, String nombre_acc, String path,
             String imgPath) {
         accesos.add(new String[]{tipo, nombre_acc, path, imgPath});
     }
+    
+    public void removeAcceso(String tipo, String nombre_acc, String path,
+            String imgPath){
+        
+        boolean found = false;
+        
+        for (int i = 0; i < this.accesos.size() && !found; i++){
+            if (this.accesos.get(i)[0].equals(tipo) &&
+                    this.accesos.get(i)[1].equals(nombre_acc) &&
+                    this.accesos.get(i)[2].equals(path) &&
+                    this.accesos.get(i)[3].equals(imgPath)){
+                found = true;
+                accesos.remove(i);
+            }
 
+        }
+    
+    }
+    
     public ArrayList<String[]> getAcceso() {
         return this.accesos;
     }
@@ -43,9 +59,5 @@ public class User {
     
     public String getPass(){
         return this.pass;
-    }
-    
-    public User getUser(){
-        return this.actualUser;
     }
 }

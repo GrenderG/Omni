@@ -142,9 +142,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JPasswordField" name="jPasswordField1">
-              <Properties>
-                <Property name="toolTipText" type="java.lang.String" value=""/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="jButton1">
               <Properties>

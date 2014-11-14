@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import omni.model.ReadFromJSON;
 
 /**
  *
@@ -91,8 +93,6 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setText("Usuario");
 
         jLabel2.setText("Contraseña");
-
-        jPasswordField1.setToolTipText("");
 
         jButton1.setText("Entrar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -196,9 +196,17 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JFrame principal = new MainWindow();
-        principal.setVisible(true);
-        this.dispose();
+        ReadFromJSON rfjson = new ReadFromJSON();
+        if (rfjson.readUser(this.jTextField1.getText(), new String(this.jPasswordField1.getPassword())) != null) {
+            JFrame principal = new MainWindow(this.jTextField1.getText(),
+                    new String(this.jPasswordField1.getPassword()));
+            principal.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecto.",
+                    "Usuario no encontrado", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

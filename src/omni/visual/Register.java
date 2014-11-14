@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import omni.controller.User;
+import omni.model.ReadFromJSON;
 import omni.model.WriteToJSON;
 
 /**
@@ -48,13 +49,19 @@ public class Register extends javax.swing.JFrame {
                         !pass.equals("") && !repeatedPass.equals("")){
                     
                     if (pass.equals(repeatedPass)){
-                        
+                        ReadFromJSON rfjson = new ReadFromJSON();
                         WriteToJSON jsonWriter = new WriteToJSON();
-                        jsonWriter.writeElement(new User(nombre, pass));
                         
-                        JFrame mainWindow = new MainWindow();
-                        mainWindow.setVisible(true);
-                        Register.this.dispose();
+                        if (rfjson.readUser(nombre) == null) {
+                            jsonWriter.writeElement(new User(nombre, pass));
+                            JFrame mainWindow = new MainWindow(nombre, pass);
+                            mainWindow.setVisible(true);
+                            Register.this.dispose();
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Ese usuario ya existe.", 
+                            "Error al registrar", JOptionPane.ERROR_MESSAGE);
+                        }
+                        
                         
                     }else{
                         JOptionPane.showMessageDialog(null, "La contraseña debe ser la misma.", 
@@ -92,8 +99,13 @@ public class Register extends javax.swing.JFrame {
         btn_register = new javax.swing.JButton();
         btn_cancel = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Registro"));
 
@@ -223,6 +235,11 @@ public class Register extends javax.swing.JFrame {
     private void textFieldUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldUserActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textFieldUserActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        JFrame login = new Login();
+        login.setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

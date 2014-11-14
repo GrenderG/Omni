@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
@@ -26,6 +27,8 @@ import omni.controller.URLController;
 import omni.controller.User;
 import omni.model.GestionAppModel;
 import omni.model.GestionWebModel;
+import omni.model.ReadFromJSON;
+import omni.model.WriteToJSON;
 
 /**
  *
@@ -33,7 +36,7 @@ import omni.model.GestionWebModel;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-    private static final String currentVersion = "0.22";
+    private static final String currentVersion = "0.26";
     private static final String runningOs = OSController.getOS();
 
     private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
@@ -54,21 +57,30 @@ public class MainWindow extends javax.swing.JFrame {
     private static final Color BG_GENERAL_BLUE = new Color(202, 238, 255);
     private static final Color BG_RESOURCE_LIGHT_BLUE = new Color(235, 248, 255);
     
-    private static User actualUser;
-
+    private User actualUser;
+    private String nombre;
+    private String pass;
+    
+    private WriteToJSON wtjson = new WriteToJSON();
+    
     /**
      * Creates new form MainWindow
+     * @param nombre
+     * @param pass
      */
-    public MainWindow() {
-
+    public MainWindow(String nombre, String pass) {
+        this.nombre = nombre;
+        this.pass = pass;
+        
         initComponents();
         
-        actualUser = actualUser.getUser();
+        ReadFromJSON rfjson = new ReadFromJSON();
+        actualUser = rfjson.readUser(nombre, pass);
         
         this.setIconImage(icon.getImage());
 
         this.setLocationRelativeTo(null);
-        this.setTitle("Omni");
+        this.setTitle("Omni | Panel de "+nombre);
 
         /*WEB*/
         this.versionLabelWeb.setText("Versión " + currentVersion);
@@ -86,7 +98,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
 
         this.tablaWeb.setModel(new GestionWebModel());
-
+        
         this.webModel = ((GestionWebModel) MainWindow.this.tablaWeb.getModel());
 
         this.panelPrincipal.setBackground(BG_GENERAL_BLUE);
@@ -219,9 +231,15 @@ public class MainWindow extends javax.swing.JFrame {
                     if (JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar "
                             + webModel.getValueAt(tablaWeb.getSelectedRow(), 0) + "?",
                             "Eliminar", JOptionPane.YES_NO_OPTION) == 0) {
+                        
+                        actualUser.removeAcceso("web", webModel.getValueAt(tablaWeb.getSelectedRow(), 0).toString(), 
+                        webModel.getValueAt(tablaWeb.getSelectedRow(), 1).toString(), 
+                        webModel.getValueAt(tablaWeb.getSelectedRow(), 2).toString());
 
                         webModel.removeRow(tablaWeb.getSelectedRow());
-
+                        
+                        wtjson.updateElement(actualUser);
+                        
                         textFieldNombreWeb.setText("");
                         textFieldURLWeb.setText("");
                         labelShowImagenWeb.setIcon(null);
@@ -395,16 +413,31 @@ public class MainWindow extends javax.swing.JFrame {
                     if (OSController.isUnix() || OSController.isMac()) {
                         nombre = textFieldNombreWeb.getText();
                         url = textFieldURLWeb.getText();
-                        imagePath = labelShowImagenWeb.getIcon().toString().substring(5, labelShowImagenWeb.getIcon().toString().length());
+                        imagePath = labelShowImagenWeb.getIcon().toString()
+                                .substring(5, labelShowImagenWeb.getIcon().toString().length());
+                        
+                        webModel.addRow(nombre, url, imagePath);
+
+                                                
+                    } else if (OSController.isWindows()) {
+                        nombre = textFieldNombreWeb.getText();
+                        url = textFieldURLWeb.getText();
+                        imagePath = labelShowImagenWeb.getIcon().toString()
+                                .substring(6, labelShowImagenWeb.getIcon().toString().length());
+                        
                         webModel.addRow(nombre, url, imagePath);
                         actualUser.setAcceso("web", nombre, url, imagePath);
+                        wtjson.updateElement(actualUser);
                         
-                    } else if (OSController.isWindows()) {
-                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(),
-                                labelShowImagenWeb.getIcon().toString().substring(6, labelShowImagenWeb.getIcon().toString().length()));
                     } else {
-                        webModel.addRow(textFieldNombreWeb.getText(), textFieldURLWeb.getText(),
-                                labelShowImagenWeb.getIcon().toString());
+                        nombre = textFieldNombreWeb.getText();
+                        url = textFieldURLWeb.getText();
+                        imagePath = labelShowImagenWeb.getIcon().toString();
+                        
+                        webModel.addRow(nombre, url, imagePath);
+                        actualUser.setAcceso("web", nombre, url, imagePath);
+                        wtjson.updateElement(actualUser);
+                        
                     }
 
                     btnAnyadirWeb.setEnabled(true);
@@ -474,7 +507,9 @@ public class MainWindow extends javax.swing.JFrame {
         this.panelImagenApp.setEnabled(false);
 
         this.scrollPaneTablaApp.getViewport().setBackground(BG_GENERAL_BLUE);
-
+        
+        setUserConfig();
+        
         for (int i = 0; i < this.tablaApp.getColumnCount(); i++) {
             TableColumn cell = this.tablaApp.getColumnModel().getColumn(i);
             cell.setCellRenderer(new ColorRenderer());
@@ -602,7 +637,13 @@ public class MainWindow extends javax.swing.JFrame {
                     if (JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar "
                             + appModel.getValueAt(tablaApp.getSelectedRow(), 0) + "?",
                             "Eliminar", JOptionPane.YES_NO_OPTION) == 0) {
-
+                        
+                        actualUser.removeAcceso("app", appModel.getValueAt(tablaApp.getSelectedRow(), 0).toString(), 
+                        appModel.getValueAt(tablaApp.getSelectedRow(), 1).toString(), 
+                        appModel.getValueAt(tablaApp.getSelectedRow(), 2).toString());
+                        
+                        wtjson.updateElement(actualUser);
+                        
                         appModel.removeRow(tablaApp.getSelectedRow());
 
                         textFieldNombreApp.setText("");
@@ -756,7 +797,9 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-
+                
+                String nombre, action, imagePath;
+                
                 if (!textFieldRutaApp.getText().equals("")
                         && !textFieldNombreApp.getText().equals("")
                         && labelShowImagenApp.getIcon() != null) {
@@ -778,14 +821,33 @@ public class MainWindow extends javax.swing.JFrame {
                     }
 
                     if (OSController.isUnix() || OSController.isMac()) {
-                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(),
-                                labelShowImagenApp.getIcon().toString().substring(5, labelShowImagenApp.getIcon().toString().length()));
+                        nombre = textFieldNombreApp.getText();
+                        action = textFieldRutaApp.getText();
+                        imagePath = labelShowImagenApp.getIcon().toString()
+                                .substring(5, labelShowImagenApp.getIcon().toString().length());
+                        
+                        appModel.addRow(nombre, action, imagePath);
+
+                                                
                     } else if (OSController.isWindows()) {
-                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(),
-                                labelShowImagenApp.getIcon().toString().substring(6, labelShowImagenApp.getIcon().toString().length()));
+                        nombre = textFieldNombreApp.getText();
+                        action = textFieldRutaApp.getText();
+                        imagePath = labelShowImagenApp.getIcon().toString()
+                                .substring(6, labelShowImagenApp.getIcon().toString().length());
+                        
+                        appModel.addRow(nombre, action, imagePath);
+                        actualUser.setAcceso("app", nombre, action, imagePath);
+                        wtjson.updateElement(actualUser);
+                        
                     } else {
-                        appModel.addRow(textFieldNombreApp.getText(), textFieldRutaApp.getText(),
-                                labelShowImagenApp.getIcon().toString());
+                        nombre = textFieldNombreApp.getText();
+                        action = textFieldRutaApp.getText();
+                        imagePath = labelShowImagenApp.getIcon().toString();
+                        
+                        appModel.addRow(nombre, action, imagePath);
+                        actualUser.setAcceso("web", nombre, action, imagePath);
+                        wtjson.updateElement(actualUser);
+                        
                     }
 
                     btnAnyadirApp.setEnabled(true);
@@ -822,7 +884,31 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
     }
+    
+    public void setNombre(String nombre){
+        this.nombre = nombre;
+    }
+    
+    public void setPass(String pass){
+        this.pass = pass;
+    }
+    
+    public void setUserConfig(){
 
+        for (int i = 0; i < actualUser.getAcceso().size(); i++){
+            
+            String nombre_acc = actualUser.getAcceso().get(i)[1];
+            String action = actualUser.getAcceso().get(i)[2];
+            String imagePath = actualUser.getAcceso().get(i)[3];
+
+            if (actualUser.getAcceso().get(i)[0].equals("web"))
+                webModel.addRow(nombre_acc, action, imagePath);                
+            else if (actualUser.getAcceso().get(i)[0].equals("app"))
+                appModel.addRow(nombre_acc, action, imagePath);
+                       
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -879,7 +965,9 @@ public class MainWindow extends javax.swing.JFrame {
         tablaApp = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        menuItemSalir = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        menuItemCerrarSesion = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
@@ -1359,13 +1447,22 @@ public class MainWindow extends javax.swing.JFrame {
 
         jMenu1.setText("Inicio");
 
-        jMenuItem1.setText("Salir");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        menuItemSalir.setText("Salir");
+        menuItemSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                menuItemSalirActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(menuItemSalir);
+        jMenu1.add(jSeparator1);
+
+        menuItemCerrarSesion.setText("Cerrar sesión");
+        menuItemCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemCerrarSesionActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuItemCerrarSesion);
 
         jMenuBar1.add(jMenu1);
 
@@ -1402,9 +1499,15 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        System.exit(0);        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void menuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_menuItemSalirActionPerformed
+
+    private void menuItemCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemCerrarSesionActionPerformed
+        JFrame login = new Login();
+        login.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuItemCerrarSesionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1433,14 +1536,6 @@ public class MainWindow extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-
-                new MainWindow().setVisible(true);
-
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1463,10 +1558,10 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel labelImagenApp;
     private javax.swing.JLabel labelImagenWeb;
     private javax.swing.JLabel labelNombreApp;
@@ -1477,6 +1572,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel labelShowImagenApp;
     private javax.swing.JLabel labelShowImagenWeb;
     private javax.swing.JLabel labelURLWeb;
+    private javax.swing.JMenuItem menuItemCerrarSesion;
+    private javax.swing.JMenuItem menuItemSalir;
     private javax.swing.JPanel panelApp;
     private javax.swing.JPanel panelBotonesApp;
     private javax.swing.JPanel panelBotonesWeb;
