@@ -17,68 +17,80 @@ import omni.controller.User;
  * @author Campus
  */
 public class WriteToJSON {
-    
+
     private static final File users = new File("users.json");
     private static final File tmpCopyUsers = new File("tmpCopyUsers.json");
     private static FileWriter fw;
     private static final Gson gson = new Gson();
     private BufferedReader br;
 
-    public void writeElement(User user){
-     
-        try {
-            
-            if (!users.exists())
-                users.createNewFile();
-            fw = new FileWriter(users, true);            
-            
-            fw.write(gson.toJson(user)+"\n");
-            
-            fw.flush();
-            fw.close();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }       
-    }
-    
-    public void updateElement(User user){
+    public void writeElement(User user) {
 
         try {
-            
-            if (!users.exists())
+
+            if (!users.exists()) {
                 users.createNewFile();
-            
+            }
+            fw = new FileWriter(users, true);
+
+            fw.write(gson.toJson(user) + "\n");
+
+            fw.flush();
+            fw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateElement(User user, boolean isChangingPass) {
+
+        try {
+
+            if (!users.exists()) {
+                users.createNewFile();
+            }
+
             fw = new FileWriter(tmpCopyUsers, true);
             br = new BufferedReader(new FileReader(users));
 
             String line = br.readLine();
 
-            while (line != null) {              
+            while (line != null) {
 
-                if (line.contains(user.getNombre()) &&
-                        line.contains(user.getPass())) {
+                if (!isChangingPass) {
+                    if (line.contains(user.getNombre())
+                            && line.contains(user.getPass())) {
 
-                    fw.write(gson.toJson(user)+"\n");
-                    
+                        fw.write(gson.toJson(user) + "\n");
+
+                    } else {
+                        fw.write(line + "\n");
+                    }
                 } else {
-                    fw.write(line+"\n");
+                    if (line.contains(user.getNombre())) {
+
+                        fw.write(gson.toJson(user) + "\n");
+
+                    } else {
+                        fw.write(line + "\n");
+                    }
                 }
-                
+
                 line = br.readLine();
-                
-            }          
-            
+
+            }
+
             br.close();
             fw.flush();
             fw.close();
-            
+
             new File("users.json").delete();
             tmpCopyUsers.renameTo(new File("users.json"));
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
 }

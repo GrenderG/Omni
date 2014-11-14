@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import omni.controller.APPController;
@@ -47,40 +48,43 @@ public class MainWindow extends javax.swing.JFrame {
     private static boolean isImageWebEnabled = false;
     private static int lastWebRowSelected;
     private static boolean isModifyingWeb = false;
+    private static boolean isAddingWeb = false;
 
     private final GestionAppModel appModel;
 
     private static boolean isImageAppEnabled = false;
     private static int lastAppRowSelected;
     private static boolean isModifyingApp = false;
+    private static boolean isAddingApp = false;
 
     private static final Color BG_GENERAL_BLUE = new Color(202, 238, 255);
     private static final Color BG_RESOURCE_LIGHT_BLUE = new Color(235, 248, 255);
-    
+
     private User actualUser;
     private String nombre;
     private String pass;
-    
+
     private WriteToJSON wtjson = new WriteToJSON();
-    
+
     /**
      * Creates new form MainWindow
+     *
      * @param nombre
      * @param pass
      */
     public MainWindow(String nombre, String pass) {
         this.nombre = nombre;
         this.pass = pass;
-        
+
         initComponents();
-        
+
         ReadFromJSON rfjson = new ReadFromJSON();
         actualUser = rfjson.readUser(nombre, pass);
-        
+
         this.setIconImage(icon.getImage());
 
         this.setLocationRelativeTo(null);
-        this.setTitle("Omni | Panel de "+nombre);
+        this.setTitle("Omni | Panel de " + nombre);
 
         /*WEB*/
         this.versionLabelWeb.setText("Versión " + currentVersion);
@@ -98,9 +102,9 @@ public class MainWindow extends javax.swing.JFrame {
         }
 
         this.tablaWeb.setModel(new GestionWebModel());
-        
-        this.webModel = ((GestionWebModel) MainWindow.this.tablaWeb.getModel());
 
+        this.webModel = ((GestionWebModel) MainWindow.this.tablaWeb.getModel());
+        this.tablaWeb.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.panelPrincipal.setBackground(BG_GENERAL_BLUE);
         this.panelWeb.setBackground(BG_GENERAL_BLUE);
         this.panelApp.setBackground(BG_GENERAL_BLUE);
@@ -135,7 +139,9 @@ public class MainWindow extends javax.swing.JFrame {
                 if (tablaWeb.getSelectedRow() != -1) {
 
                     URLController.openUrl((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
-
+                    actualUser.setAccesosCount((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 0),
+                            (String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
+                    wtjson.updateElement(actualUser, false);
                 } else {
                     JOptionPane.showMessageDialog(null, "Debes seleccionar algo.",
                             "Error al iniciar", JOptionPane.ERROR_MESSAGE);
@@ -151,6 +157,9 @@ public class MainWindow extends javax.swing.JFrame {
 
                 if (me.getClickCount() == 2) {
                     URLController.openUrl((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
+                    actualUser.setAccesosCount((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 0),
+                            (String) webModel.getValueAt(tablaWeb.getSelectedRow(), 1));
+                    wtjson.updateElement(actualUser, false);
                 }
 
                 btnClipboardWeb.setEnabled(true);
@@ -197,6 +206,8 @@ public class MainWindow extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
 
+                isAddingWeb = true;
+
                 textFieldNombreWeb.setText("");
                 textFieldURLWeb.setText("");
                 labelShowImagenWeb.setIcon(
@@ -231,15 +242,15 @@ public class MainWindow extends javax.swing.JFrame {
                     if (JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar "
                             + webModel.getValueAt(tablaWeb.getSelectedRow(), 0) + "?",
                             "Eliminar", JOptionPane.YES_NO_OPTION) == 0) {
-                        
-                        actualUser.removeAcceso("web", webModel.getValueAt(tablaWeb.getSelectedRow(), 0).toString(), 
-                        webModel.getValueAt(tablaWeb.getSelectedRow(), 1).toString(), 
-                        webModel.getValueAt(tablaWeb.getSelectedRow(), 2).toString());
+
+                        actualUser.removeAcceso("web", webModel.getValueAt(tablaWeb.getSelectedRow(), 0).toString(),
+                                webModel.getValueAt(tablaWeb.getSelectedRow(), 1).toString(),
+                                webModel.getValueAt(tablaWeb.getSelectedRow(), 2).toString());
 
                         webModel.removeRow(tablaWeb.getSelectedRow());
-                        
-                        wtjson.updateElement(actualUser);
-                        
+
+                        wtjson.updateElement(actualUser, false);
+
                         textFieldNombreWeb.setText("");
                         textFieldURLWeb.setText("");
                         labelShowImagenWeb.setIcon(null);
@@ -387,10 +398,9 @@ public class MainWindow extends javax.swing.JFrame {
         this.btnOkWeb.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent ae) {               
+            public void actionPerformed(ActionEvent ae) {
                 String nombre, url, imagePath;
-                
-                
+
                 if (!textFieldURLWeb.getText().equals("")
                         && !textFieldNombreWeb.getText().equals("")
                         && labelShowImagenWeb.getIcon() != null) {
@@ -407,13 +417,13 @@ public class MainWindow extends javax.swing.JFrame {
                     }
 
                     if (isModifyingWeb) {
-                        
-                        actualUser.removeAcceso("web", webModel.getValueAt(lastWebRowSelected, 0).toString(), 
-                        webModel.getValueAt(lastWebRowSelected, 1).toString(), 
-                        webModel.getValueAt(lastWebRowSelected, 2).toString());
-                        
-                        wtjson.updateElement(actualUser);
-                        
+
+                        actualUser.removeAcceso("web", webModel.getValueAt(lastWebRowSelected, 0).toString(),
+                                webModel.getValueAt(lastWebRowSelected, 1).toString(),
+                                webModel.getValueAt(lastWebRowSelected, 2).toString());
+
+                        wtjson.updateElement(actualUser, false);
+
                         webModel.removeRow(lastWebRowSelected);
                     }
 
@@ -425,26 +435,25 @@ public class MainWindow extends javax.swing.JFrame {
 
                         webModel.addRow(nombre, url, imagePath);
 
-                                                
                     } else if (OSController.isWindows()) {
                         nombre = textFieldNombreWeb.getText();
                         url = textFieldURLWeb.getText();
                         imagePath = labelShowImagenWeb.getIcon().toString()
                                 .substring(6, labelShowImagenWeb.getIcon().toString().length());
-                        
+
                         webModel.addRow(nombre, url, imagePath);
                         actualUser.setAcceso("web", nombre, url, imagePath);
-                        wtjson.updateElement(actualUser);
-                        
+                        wtjson.updateElement(actualUser, false);
+
                     } else {
                         nombre = textFieldNombreWeb.getText();
                         url = textFieldURLWeb.getText();
                         imagePath = labelShowImagenWeb.getIcon().toString();
-                        
+
                         webModel.addRow(nombre, url, imagePath);
                         actualUser.setAcceso("web", nombre, url, imagePath);
-                        wtjson.updateElement(actualUser);
-                        
+                        wtjson.updateElement(actualUser, false);
+
                     }
 
                     btnAnyadirWeb.setEnabled(true);
@@ -460,7 +469,7 @@ public class MainWindow extends javax.swing.JFrame {
                     tablaWeb.clearSelection();
 
                     isModifyingWeb = false;
-
+                    isAddingWeb = false;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos.",
                             "Imposible añadir web", JOptionPane.ERROR_MESSAGE);
@@ -498,7 +507,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
 
         this.appModel = ((GestionAppModel) MainWindow.this.tablaApp.getModel());
-
+        this.tablaApp.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.panelApp.setBackground(BG_GENERAL_BLUE);
         this.panelBotonesApp.setBackground(BG_GENERAL_BLUE);
         this.panelEditorApp.setBackground(BG_GENERAL_BLUE);
@@ -514,9 +523,9 @@ public class MainWindow extends javax.swing.JFrame {
         this.panelImagenApp.setEnabled(false);
 
         this.scrollPaneTablaApp.getViewport().setBackground(BG_GENERAL_BLUE);
-        
+
         setUserConfig();
-        
+
         for (int i = 0; i < this.tablaApp.getColumnCount(); i++) {
             TableColumn cell = this.tablaApp.getColumnModel().getColumn(i);
             cell.setCellRenderer(new ColorRenderer());
@@ -547,6 +556,9 @@ public class MainWindow extends javax.swing.JFrame {
                 if (tablaApp.getSelectedRow() != -1) {
 
                     APPController.openApp((String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
+                    actualUser.setAccesosCount((String) appModel.getValueAt(tablaApp.getSelectedRow(), 0),
+                            (String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
+                    wtjson.updateElement(actualUser, false);
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Debes seleccionar algo.",
@@ -563,6 +575,9 @@ public class MainWindow extends javax.swing.JFrame {
 
                 if (me.getClickCount() == 2) {
                     APPController.openApp((String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
+                    actualUser.setAccesosCount((String) appModel.getValueAt(tablaApp.getSelectedRow(), 0),
+                            (String) appModel.getValueAt(tablaApp.getSelectedRow(), 1));
+                    wtjson.updateElement(actualUser, false);
                 }
 
                 btnClipboardApp.setEnabled(true);
@@ -609,6 +624,8 @@ public class MainWindow extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
 
+                isAddingApp = true;
+
                 textFieldNombreApp.setText("");
                 textFieldRutaApp.setText("");
                 labelShowImagenApp.setIcon(
@@ -644,13 +661,13 @@ public class MainWindow extends javax.swing.JFrame {
                     if (JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar "
                             + appModel.getValueAt(tablaApp.getSelectedRow(), 0) + "?",
                             "Eliminar", JOptionPane.YES_NO_OPTION) == 0) {
-                        
-                        actualUser.removeAcceso("app", appModel.getValueAt(tablaApp.getSelectedRow(), 0).toString(), 
-                        appModel.getValueAt(tablaApp.getSelectedRow(), 1).toString(), 
-                        appModel.getValueAt(tablaApp.getSelectedRow(), 2).toString());
-                        
-                        wtjson.updateElement(actualUser);
-                        
+
+                        actualUser.removeAcceso("app", appModel.getValueAt(tablaApp.getSelectedRow(), 0).toString(),
+                                appModel.getValueAt(tablaApp.getSelectedRow(), 1).toString(),
+                                appModel.getValueAt(tablaApp.getSelectedRow(), 2).toString());
+
+                        wtjson.updateElement(actualUser, false);
+
                         appModel.removeRow(tablaApp.getSelectedRow());
 
                         textFieldNombreApp.setText("");
@@ -804,9 +821,9 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                
+
                 String nombre, action, imagePath;
-                
+
                 if (!textFieldRutaApp.getText().equals("")
                         && !textFieldNombreApp.getText().equals("")
                         && labelShowImagenApp.getIcon() != null) {
@@ -820,13 +837,13 @@ public class MainWindow extends javax.swing.JFrame {
                     isImageAppEnabled = false;
 
                     if (isModifyingApp) {
-                                                                        
-                        actualUser.removeAcceso("app", appModel.getValueAt(lastAppRowSelected, 0).toString(), 
-                        appModel.getValueAt(lastAppRowSelected, 1).toString(), 
-                        appModel.getValueAt(lastAppRowSelected, 2).toString());
-                        
-                        wtjson.updateElement(actualUser);
-                        
+
+                        actualUser.removeAcceso("app", appModel.getValueAt(lastAppRowSelected, 0).toString(),
+                                appModel.getValueAt(lastAppRowSelected, 1).toString(),
+                                appModel.getValueAt(lastAppRowSelected, 2).toString());
+
+                        wtjson.updateElement(actualUser, false);
+
                         appModel.removeRow(lastAppRowSelected);
                     }
 
@@ -835,29 +852,28 @@ public class MainWindow extends javax.swing.JFrame {
                         action = textFieldRutaApp.getText();
                         imagePath = labelShowImagenApp.getIcon().toString()
                                 .substring(5, labelShowImagenApp.getIcon().toString().length());
-                        
+
                         appModel.addRow(nombre, action, imagePath);
 
-                                                
                     } else if (OSController.isWindows()) {
                         nombre = textFieldNombreApp.getText();
                         action = textFieldRutaApp.getText();
                         imagePath = labelShowImagenApp.getIcon().toString()
                                 .substring(6, labelShowImagenApp.getIcon().toString().length());
-                        
+
                         appModel.addRow(nombre, action, imagePath);
                         actualUser.setAcceso("app", nombre, action, imagePath);
-                        wtjson.updateElement(actualUser);
-                        
+                        wtjson.updateElement(actualUser, false);
+
                     } else {
                         nombre = textFieldNombreApp.getText();
                         action = textFieldRutaApp.getText();
                         imagePath = labelShowImagenApp.getIcon().toString();
-                        
+
                         appModel.addRow(nombre, action, imagePath);
                         actualUser.setAcceso("web", nombre, action, imagePath);
-                        wtjson.updateElement(actualUser);
-                        
+                        wtjson.updateElement(actualUser, false);
+
                     }
 
                     btnAnyadirApp.setEnabled(true);
@@ -873,7 +889,7 @@ public class MainWindow extends javax.swing.JFrame {
                     tablaApp.clearSelection();
 
                     isModifyingApp = false;
-
+                    isAddingApp = false;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos.",
                             "Imposible añadir web", JOptionPane.ERROR_MESSAGE);
@@ -894,31 +910,32 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
     }
-    
-    public void setNombre(String nombre){
+
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
-    public void setPass(String pass){
+
+    public void setPass(String pass) {
         this.pass = pass;
     }
-    
-    public void setUserConfig(){
 
-        for (int i = 0; i < actualUser.getAcceso().size(); i++){
-            
+    public void setUserConfig() {
+
+        for (int i = 0; i < actualUser.getAcceso().size(); i++) {
+
             String nombre_acc = actualUser.getAcceso().get(i)[1];
             String action = actualUser.getAcceso().get(i)[2];
             String imagePath = actualUser.getAcceso().get(i)[3];
 
-            if (actualUser.getAcceso().get(i)[0].equals("web"))
-                webModel.addRow(nombre_acc, action, imagePath);                
-            else if (actualUser.getAcceso().get(i)[0].equals("app"))
+            if (actualUser.getAcceso().get(i)[0].equals("web")) {
+                webModel.addRow(nombre_acc, action, imagePath);
+            } else if (actualUser.getAcceso().get(i)[0].equals("app")) {
                 appModel.addRow(nombre_acc, action, imagePath);
-                       
+            }
+
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -984,11 +1001,16 @@ public class MainWindow extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(714, 612));
         setMinimumSize(new java.awt.Dimension(714, 612));
         setPreferredSize(new java.awt.Dimension(714, 612));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         tabbedPanePrincipal.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         tabbedPanePrincipal.setTabPlacement(javax.swing.JTabbedPane.LEFT);
@@ -1479,6 +1501,11 @@ public class MainWindow extends javax.swing.JFrame {
         jMenu2.setText("Opciones");
 
         jMenuItem2.setText("Ver perfil");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem2);
 
         jMenuBar1.add(jMenu2);
@@ -1518,6 +1545,24 @@ public class MainWindow extends javax.swing.JFrame {
         login.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_menuItemCerrarSesionActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if (isModifyingWeb || isModifyingApp
+                || isAddingWeb || isAddingApp) {
+            if (JOptionPane.showConfirmDialog(null, "¿Seguro que deseas salir ahora?",
+                    "Salir", JOptionPane.YES_NO_OPTION) == 0) {
+                System.exit(0);
+            }
+        } else {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        JFrame viewProfile = new ViewProfile(actualUser);
+        viewProfile.setVisible(true);
+        viewProfile.requestFocus();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments

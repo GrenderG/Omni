@@ -24,8 +24,10 @@ public class APPController {
                 } else if (url.contains(".sh")) {
                     app.exec("chmod +x " + url);
                     app.exec(url);
-                } else {
+                } else if (url.contains(".")){
                     Desktop.getDesktop().open(new File(url));
+                }else{
+                    app.exec(url);
                 }
             } else {
                 if (url.contains(".exe")) {
@@ -34,8 +36,10 @@ public class APPController {
                     app.exec("java -jar " + url);
                 } else if (url.contains(".bat")) {
                     app.exec("cmd /c start " + url);
-                } else {
+                } else if (url.contains(".")){
                     Desktop.getDesktop().open(new File(url));
+                }else{
+                    app.exec(url);
                 }
             }
         } catch (Exception e) {
