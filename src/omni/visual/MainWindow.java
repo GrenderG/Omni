@@ -6,26 +6,32 @@
 package omni.visual;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import omni.controller.APPController;
 import omni.controller.ClipboardController;
+import omni.controller.ImageFixer;
 import omni.controller.OSController;
 import omni.controller.URLController;
-import omni.controller.User;
+import omni.model.User;
 import omni.model.GestionAppModel;
 import omni.model.GestionWebModel;
 import omni.model.ReadFromJSON;
@@ -37,20 +43,23 @@ import omni.model.WriteToJSON;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-    private static final String currentVersion = "0.30";
-    private static final String runningOs = OSController.getOS();
+    private static final String CURRENT_VERSION = "0.35";
+    private static final String RUNNING_OS = OSController.getOS();
 
     private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
-    private JFileChooser jf = new JFileChooser();
+    private static final FileFilter imageFilter = new FileNameExtensionFilter("Imágenes", ImageIO.getReaderFileSuffixes());
 
-    private final GestionWebModel webModel;
+    private static final JFileChooser jfImage = new JFileChooser();
+    private static final JFileChooser jfApp = new JFileChooser();
+
+    private static GestionWebModel webModel;
 
     private static boolean isImageWebEnabled = false;
     private static int lastWebRowSelected;
     private static boolean isModifyingWeb = false;
     private static boolean isAddingWeb = false;
 
-    private final GestionAppModel appModel;
+    private static GestionAppModel appModel;
 
     private static boolean isImageAppEnabled = false;
     private static int lastAppRowSelected;
@@ -64,7 +73,9 @@ public class MainWindow extends javax.swing.JFrame {
     private String nombre;
     private String pass;
 
+    private final ImageFixer imgFixer = new ImageFixer();
     private WriteToJSON wtjson = new WriteToJSON();
+    private String tmpRutaAbsPath;
 
     /**
      * Creates new form MainWindow
@@ -78,6 +89,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         initComponents();
 
+        /*Quitando filtro "Todos los archivos" y añadiendo filtro personalizado.*/
+        jfImage.removeChoosableFileFilter(jfImage.getAcceptAllFileFilter());
+        jfImage.setFileFilter(imageFilter);
+
+        /*Importando datos desde users.json*/
         ReadFromJSON rfjson = new ReadFromJSON();
         actualUser = rfjson.readUser(nombre, pass);
 
@@ -87,15 +103,16 @@ public class MainWindow extends javax.swing.JFrame {
         this.setTitle("Omni | Panel de " + nombre);
 
         /*WEB*/
-        this.versionLabelWeb.setText("Versión " + currentVersion);
+        this.versionLabelWeb.setText("Versión " + CURRENT_VERSION);
 
-        this.labelRunningOsWeb.setToolTipText("Corriendo en " + runningOs);
+        /*Según el SO aparecerá una imagen u otra.*/
+        this.labelRunningOsWeb.setToolTipText("Corriendo en " + RUNNING_OS);
 
-        if (runningOs.equals("Windows")) {
+        if (RUNNING_OS.equals("Windows")) {
             this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/windows.png")));
-        } else if (runningOs.equals("Linux")) {
+        } else if (RUNNING_OS.equals("Linux")) {
             this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/linux.png")));
-        } else if (runningOs.equals("OSx")) {
+        } else if (RUNNING_OS.equals("OSx")) {
             this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/osx.png")));
         } else {
             this.labelRunningOsWeb.setText("Unknown");
@@ -104,6 +121,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.tablaWeb.setModel(new GestionWebModel());
 
         this.webModel = ((GestionWebModel) MainWindow.this.tablaWeb.getModel());
+        /*No permitiendo la selección múltiple de filas*/
         this.tablaWeb.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.panelPrincipal.setBackground(BG_GENERAL_BLUE);
         this.panelWeb.setBackground(BG_GENERAL_BLUE);
@@ -120,13 +138,16 @@ public class MainWindow extends javax.swing.JFrame {
         this.btnClipboardWeb.setEnabled(false);
         this.panelImagenWeb.setEnabled(false);
 
+        /*Poniendo background al fondo de la tabla.*/
         this.scrollPaneTablaWeb.getViewport().setBackground(BG_GENERAL_BLUE);
 
+        /*Asignando a todas las celdas de la tabla un CellRenderer*/
         for (int i = 0; i < this.tablaWeb.getColumnCount(); i++) {
             TableColumn cell = this.tablaWeb.getColumnModel().getColumn(i);
             cell.setCellRenderer(new ColorRenderer());
         }
 
+        /*Asignada a la tabla la ordenación. */
         TableRowSorter<GestionWebModel> webSorter
                 = new TableRowSorter<>((GestionWebModel) this.tablaWeb.getModel());
 
@@ -170,12 +191,9 @@ public class MainWindow extends javax.swing.JFrame {
                 File rutaAbs = new File((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 2));
 
                 rutaAbs = rutaAbs.getAbsoluteFile();
+                rutaAbs = imgFixer.spacePathFixer(rutaAbs);
 
-                try {
-                    labelShowImagenWeb.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                labelShowImagenWeb.setIcon(new ImageIcon(imgFixer.scaleImage(rutaAbs, 128, 128)));
 
             }
 
@@ -210,9 +228,7 @@ public class MainWindow extends javax.swing.JFrame {
 
                 textFieldNombreWeb.setText("");
                 textFieldURLWeb.setText("");
-                labelShowImagenWeb.setIcon(
-                        new ImageIcon(MainWindow.class.getResource("/res/icon.png")));
-
+                labelShowImagenWeb.setIcon(null);
                 textFieldNombreWeb.setEditable(true);
                 textFieldURLWeb.setEditable(true);
                 panelImagenWeb.setEnabled(true);
@@ -307,17 +323,13 @@ public class MainWindow extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
 
                 if (isImageWebEnabled) {
-                    if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    if (jfImage.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 
-                        File rutaAbs = jf.getSelectedFile().getAbsoluteFile();
+                        File rutaAbs = jfImage.getSelectedFile().getAbsoluteFile();
 
-                        try {
-
-                            labelShowImagenWeb.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
-
-                        } catch (MalformedURLException ex) {
-                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        rutaAbs = imgFixer.spacePathFixer(rutaAbs);
+                        tmpRutaAbsPath = rutaAbs.toString();
+                        labelShowImagenWeb.setIcon(new ImageIcon(imgFixer.scaleImage(rutaAbs, 128, 128)));
 
                     }
                 }
@@ -379,12 +391,9 @@ public class MainWindow extends javax.swing.JFrame {
                     File rutaAbs = new File((String) webModel.getValueAt(tablaWeb.getSelectedRow(), 2));
 
                     rutaAbs = rutaAbs.getAbsoluteFile();
+                    rutaAbs = imgFixer.spacePathFixer(rutaAbs);
 
-                    try {
-                        labelShowImagenWeb.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
-                    } catch (MalformedURLException ex) {
-                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    labelShowImagenWeb.setIcon(new ImageIcon(imgFixer.scaleImage(rutaAbs, 128, 128)));
 
                     isModifyingWeb = true;
 
@@ -427,34 +436,13 @@ public class MainWindow extends javax.swing.JFrame {
                         webModel.removeRow(lastWebRowSelected);
                     }
 
-                    if (OSController.isUnix() || OSController.isMac()) {
-                        nombre = textFieldNombreWeb.getText();
-                        url = textFieldURLWeb.getText();
-                        imagePath = labelShowImagenWeb.getIcon().toString()
-                                .substring(5, labelShowImagenWeb.getIcon().toString().length());
+                    nombre = textFieldNombreWeb.getText();
+                    url = textFieldURLWeb.getText();
+                    imagePath = tmpRutaAbsPath;
 
-                        webModel.addRow(nombre, url, imagePath);
-
-                    } else if (OSController.isWindows()) {
-                        nombre = textFieldNombreWeb.getText();
-                        url = textFieldURLWeb.getText();
-                        imagePath = labelShowImagenWeb.getIcon().toString()
-                                .substring(6, labelShowImagenWeb.getIcon().toString().length());
-
-                        webModel.addRow(nombre, url, imagePath);
-                        actualUser.setAcceso("web", nombre, url, imagePath);
-                        wtjson.updateElement(actualUser, false);
-
-                    } else {
-                        nombre = textFieldNombreWeb.getText();
-                        url = textFieldURLWeb.getText();
-                        imagePath = labelShowImagenWeb.getIcon().toString();
-
-                        webModel.addRow(nombre, url, imagePath);
-                        actualUser.setAcceso("web", nombre, url, imagePath);
-                        wtjson.updateElement(actualUser, false);
-
-                    }
+                    webModel.addRow(nombre, url, imagePath);
+                    actualUser.setAcceso("web", nombre, url, imagePath);
+                    wtjson.updateElement(actualUser, false);
 
                     btnAnyadirWeb.setEnabled(true);
                     btnIniciarWeb.setEnabled(true);
@@ -490,17 +478,17 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         /*APP*/
-        this.versionLabelApp.setText("Versión " + currentVersion);
+        this.versionLabelApp.setText("Versión " + CURRENT_VERSION);
 
         this.tablaApp.setModel(new GestionAppModel());
 
-        this.labelRunningOsApp.setToolTipText("Corriendo en " + runningOs);
+        this.labelRunningOsApp.setToolTipText("Corriendo en " + RUNNING_OS);
 
-        if (runningOs.equals("Windows")) {
+        if (RUNNING_OS.equals("Windows")) {
             this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/windows.png")));
-        } else if (runningOs.equals("Linux")) {
+        } else if (RUNNING_OS.equals("Linux")) {
             this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/linux.png")));
-        } else if (runningOs.equals("OSx")) {
+        } else if (RUNNING_OS.equals("OSx")) {
             this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/osx.png")));
         } else {
             this.labelRunningOsApp.setText("Unknown");
@@ -540,9 +528,9 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                if (jfApp.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 
-                    textFieldRutaApp.setText(jf.getSelectedFile().getAbsoluteFile().getAbsolutePath());
+                    textFieldRutaApp.setText(jfApp.getSelectedFile().getAbsoluteFile().getAbsolutePath());
 
                 }
             }
@@ -588,12 +576,9 @@ public class MainWindow extends javax.swing.JFrame {
                 File rutaAbs = new File((String) appModel.getValueAt(tablaApp.getSelectedRow(), 2));
 
                 rutaAbs = rutaAbs.getAbsoluteFile();
+                rutaAbs = imgFixer.spacePathFixer(rutaAbs);
 
-                try {
-                    labelShowImagenApp.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                labelShowImagenApp.setIcon(new ImageIcon(imgFixer.scaleImage(rutaAbs, 128, 128)));
 
             }
 
@@ -628,9 +613,7 @@ public class MainWindow extends javax.swing.JFrame {
 
                 textFieldNombreApp.setText("");
                 textFieldRutaApp.setText("");
-                labelShowImagenApp.setIcon(
-                        new ImageIcon(MainWindow.class.getResource("/res/icon.png")));
-
+                labelShowImagenApp.setIcon(null);
                 textFieldNombreApp.setEditable(true);
                 textFieldRutaApp.setEditable(true);
                 panelImagenApp.setEnabled(true);
@@ -728,17 +711,12 @@ public class MainWindow extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
 
                 if (isImageAppEnabled) {
-                    if (jf.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    if (jfImage.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 
-                        File rutaAbs = jf.getSelectedFile().getAbsoluteFile();
-
-                        try {
-
-                            labelShowImagenApp.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
-
-                        } catch (MalformedURLException ex) {
-                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        File rutaAbs = jfImage.getSelectedFile().getAbsoluteFile();
+                        rutaAbs = imgFixer.spacePathFixer(rutaAbs);
+                        tmpRutaAbsPath = rutaAbs.toString();
+                        labelShowImagenApp.setIcon(new ImageIcon(imgFixer.scaleImage(rutaAbs, 128, 128)));
 
                     }
                 }
@@ -802,11 +780,9 @@ public class MainWindow extends javax.swing.JFrame {
 
                     rutaAbs = rutaAbs.getAbsoluteFile();
 
-                    try {
-                        labelShowImagenApp.setIcon(new ImageIcon(rutaAbs.toURI().toURL()));
-                    } catch (MalformedURLException ex) {
-                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    rutaAbs = imgFixer.spacePathFixer(rutaAbs);
+
+                    labelShowImagenApp.setIcon(new ImageIcon(imgFixer.scaleImage(rutaAbs, 128, 128)));
 
                     isModifyingApp = true;
 
@@ -847,34 +823,13 @@ public class MainWindow extends javax.swing.JFrame {
                         appModel.removeRow(lastAppRowSelected);
                     }
 
-                    if (OSController.isUnix() || OSController.isMac()) {
-                        nombre = textFieldNombreApp.getText();
-                        action = textFieldRutaApp.getText();
-                        imagePath = labelShowImagenApp.getIcon().toString()
-                                .substring(5, labelShowImagenApp.getIcon().toString().length());
+                    nombre = textFieldNombreApp.getText();
+                    action = textFieldRutaApp.getText();
+                    imagePath = imagePath = tmpRutaAbsPath;
 
-                        appModel.addRow(nombre, action, imagePath);
-
-                    } else if (OSController.isWindows()) {
-                        nombre = textFieldNombreApp.getText();
-                        action = textFieldRutaApp.getText();
-                        imagePath = labelShowImagenApp.getIcon().toString()
-                                .substring(6, labelShowImagenApp.getIcon().toString().length());
-
-                        appModel.addRow(nombre, action, imagePath);
-                        actualUser.setAcceso("app", nombre, action, imagePath);
-                        wtjson.updateElement(actualUser, false);
-
-                    } else {
-                        nombre = textFieldNombreApp.getText();
-                        action = textFieldRutaApp.getText();
-                        imagePath = labelShowImagenApp.getIcon().toString();
-
-                        appModel.addRow(nombre, action, imagePath);
-                        actualUser.setAcceso("web", nombre, action, imagePath);
-                        wtjson.updateElement(actualUser, false);
-
-                    }
+                    appModel.addRow(nombre, action, imagePath);
+                    actualUser.setAcceso("app", nombre, action, imagePath);
+                    wtjson.updateElement(actualUser, false);
 
                     btnAnyadirApp.setEnabled(true);
                     btnIniciarApp.setEnabled(true);

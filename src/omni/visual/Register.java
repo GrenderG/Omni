@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import omni.controller.User;
+import omni.model.User;
 import omni.model.ReadFromJSON;
 import omni.model.WriteToJSON;
 

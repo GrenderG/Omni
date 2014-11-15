@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import omni.controller.User;
 
 /**
  *
@@ -42,7 +41,12 @@ public class WriteToJSON {
             e.printStackTrace();
         }
     }
-
+    
+    /*Copia la info de users.json a un archivo temporal exactamente igual 
+    menos la linea que hemos modificado (la que hace referencia al user 
+    actual con datos modificados, posteriormente renombra el archivo temporal
+    a users.json y borra el original.*/
+    
     public void updateElement(User user, boolean isChangingPass) {
 
         try {
