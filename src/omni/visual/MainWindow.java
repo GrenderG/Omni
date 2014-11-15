@@ -6,16 +6,11 @@
 package omni.visual;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -43,7 +38,7 @@ import omni.model.WriteToJSON;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-    private static final String CURRENT_VERSION = "0.35";
+    private static final String CURRENT_VERSION = "0.39";
     private static final String RUNNING_OS = OSController.getOS();
 
     private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
@@ -436,7 +431,6 @@ public class MainWindow extends javax.swing.JFrame {
                         webModel.removeRow(lastWebRowSelected);
                     }
 
-<<<<<<< HEAD
                     nombre = textFieldNombreWeb.getText();
                     url = textFieldURLWeb.getText();
                     imagePath = tmpRutaAbsPath;
@@ -444,38 +438,6 @@ public class MainWindow extends javax.swing.JFrame {
                     webModel.addRow(nombre, url, imagePath);
                     actualUser.setAcceso("web", nombre, url, imagePath);
                     wtjson.updateElement(actualUser, false);
-=======
-                    if (OSController.isUnix() || OSController.isMac()) {
-                        nombre = textFieldNombreWeb.getText();
-                        url = textFieldURLWeb.getText();
-                        imagePath = labelShowImagenWeb.getIcon().toString()
-                                .substring(5, labelShowImagenWeb.getIcon().toString().length());
-
-                        webModel.addRow(nombre, url, imagePath);
-                        actualUser.setAcceso("web", nombre, url, imagePath);
-                        wtjson.updateElement(actualUser, false);
-                        
-                    } else if (OSController.isWindows()) {
-                        nombre = textFieldNombreWeb.getText();
-                        url = textFieldURLWeb.getText();
-                        imagePath = labelShowImagenWeb.getIcon().toString()
-                                .substring(6, labelShowImagenWeb.getIcon().toString().length());
-
-                        webModel.addRow(nombre, url, imagePath);
-                        actualUser.setAcceso("web", nombre, url, imagePath);
-                        wtjson.updateElement(actualUser, false);
-
-                    } else {
-                        nombre = textFieldNombreWeb.getText();
-                        url = textFieldURLWeb.getText();
-                        imagePath = labelShowImagenWeb.getIcon().toString();
-
-                        webModel.addRow(nombre, url, imagePath);
-                        actualUser.setAcceso("web", nombre, url, imagePath);
-                        wtjson.updateElement(actualUser, false);
-
-                    }
->>>>>>> 1b8ef4bba30a963eb82ce8959137a2b28bae1202
 
                     btnAnyadirWeb.setEnabled(true);
                     btnIniciarWeb.setEnabled(true);
@@ -856,7 +818,6 @@ public class MainWindow extends javax.swing.JFrame {
                         appModel.removeRow(lastAppRowSelected);
                     }
 
-<<<<<<< HEAD
                     nombre = textFieldNombreApp.getText();
                     action = textFieldRutaApp.getText();
                     imagePath = imagePath = tmpRutaAbsPath;
@@ -864,38 +825,6 @@ public class MainWindow extends javax.swing.JFrame {
                     appModel.addRow(nombre, action, imagePath);
                     actualUser.setAcceso("app", nombre, action, imagePath);
                     wtjson.updateElement(actualUser, false);
-=======
-                    if (OSController.isUnix() || OSController.isMac()) {
-                        nombre = textFieldNombreApp.getText();
-                        action = textFieldRutaApp.getText();
-                        imagePath = labelShowImagenApp.getIcon().toString()
-                                .substring(5, labelShowImagenApp.getIcon().toString().length());
-
-                        appModel.addRow(nombre, action, imagePath);
-                        actualUser.setAcceso("app", nombre, action, imagePath);
-                        wtjson.updateElement(actualUser, false);
-
-                    } else if (OSController.isWindows()) {
-                        nombre = textFieldNombreApp.getText();
-                        action = textFieldRutaApp.getText();
-                        imagePath = labelShowImagenApp.getIcon().toString()
-                                .substring(6, labelShowImagenApp.getIcon().toString().length());
-                        
-                        appModel.addRow(nombre, action, imagePath);
-                        actualUser.setAcceso("app", nombre, action, imagePath);
-                        wtjson.updateElement(actualUser, false);
-
-                    } else {
-                        nombre = textFieldNombreApp.getText();
-                        action = textFieldRutaApp.getText();
-                        imagePath = labelShowImagenApp.getIcon().toString();
-
-                        appModel.addRow(nombre, action, imagePath);
-                        actualUser.setAcceso("web", nombre, action, imagePath);
-                        wtjson.updateElement(actualUser, false);
-
-                    }
->>>>>>> 1b8ef4bba30a963eb82ce8959137a2b28bae1202
 
                     btnAnyadirApp.setEnabled(true);
                     btnIniciarApp.setEnabled(true);
