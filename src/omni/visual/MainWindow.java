@@ -38,7 +38,7 @@ import omni.model.WriteToJSON;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-    private static final String CURRENT_VERSION = "0.39";
+    private static final String CURRENT_VERSION = "0.40";
     private static final String RUNNING_OS = OSController.getOS();
 
     private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));

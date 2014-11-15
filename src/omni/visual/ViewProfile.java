@@ -42,7 +42,7 @@ public class ViewProfile extends javax.swing.JFrame {
         this.setTitle("Omni | Ver perfil");
         this.setLocationRelativeTo(null);
 
-        this.textFieldNewPass.setVisible(false);
+        this.labelFieldNewPass.setVisible(false);
         this.labelRepeatPass.setVisible(false);
         this.pwFieldNewPass.setVisible(false);
         this.pwFieldRepeatNewPass.setVisible(false);
@@ -86,7 +86,7 @@ public class ViewProfile extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (checkBoxChangePass.isSelected()) {
-                    ViewProfile.this.textFieldNewPass.setVisible(true);
+                    ViewProfile.this.labelFieldNewPass.setVisible(true);
                     ViewProfile.this.pwFieldNewPass.setVisible(true);
                     ViewProfile.this.pwFieldRepeatNewPass.setVisible(true);
                     ViewProfile.this.btnChangePass.setVisible(true);
@@ -94,7 +94,7 @@ public class ViewProfile extends javax.swing.JFrame {
                     ViewProfile.this.labelActualPass.setVisible(true);
                     ViewProfile.this.pwFieldActualPass.setVisible(true);
                 } else {
-                    ViewProfile.this.textFieldNewPass.setVisible(false);
+                    ViewProfile.this.labelFieldNewPass.setVisible(false);
                     ViewProfile.this.pwFieldNewPass.setVisible(false);
                     ViewProfile.this.pwFieldRepeatNewPass.setVisible(false);
                     ViewProfile.this.btnChangePass.setVisible(false);
@@ -110,7 +110,7 @@ public class ViewProfile extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                
                 if (new String(ViewProfile.this.pwFieldNewPass.getPassword()).
                         equals(new String(ViewProfile.this.pwFieldRepeatNewPass.getPassword()))) {
                     
@@ -119,7 +119,11 @@ public class ViewProfile extends javax.swing.JFrame {
                     if (passActual.equals(actualUser.getPass())) {
                         actualUser.setPass(new String(ViewProfile.this.pwFieldNewPass.getPassword()));
                         wtjson.updateElement(actualUser, true);
-
+                        ViewProfile.this.pwFieldActualPass.setText("");
+                        ViewProfile.this.pwFieldNewPass.setText("");
+                        ViewProfile.this.pwFieldRepeatNewPass.setText("");
+                        JOptionPane.showMessageDialog(null, "La contraseña se ha cambiado satisfactoriamente.",
+                                "Contraseña cambiada", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(null, "Debes introducir la contraseña actual",
                                 "La contraseña no es la actual", JOptionPane.ERROR_MESSAGE);
@@ -148,7 +152,7 @@ public class ViewProfile extends javax.swing.JFrame {
         textFieldNombre = new javax.swing.JTextField();
         checkBoxChangePass = new javax.swing.JCheckBox();
         pwFieldNewPass = new javax.swing.JPasswordField();
-        textFieldNewPass = new javax.swing.JLabel();
+        labelFieldNewPass = new javax.swing.JLabel();
         btnChangePass = new javax.swing.JButton();
         pwFieldRepeatNewPass = new javax.swing.JPasswordField();
         labelRepeatPass = new javax.swing.JLabel();
@@ -171,7 +175,7 @@ public class ViewProfile extends javax.swing.JFrame {
 
         checkBoxChangePass.setText("Cambiar contraseña");
 
-        textFieldNewPass.setText("Nueva: ");
+        labelFieldNewPass.setText("Nueva: ");
 
         btnChangePass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/checkmark-26.png"))); // NOI18N
 
@@ -193,7 +197,7 @@ public class ViewProfile extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(checkBoxChangePass)
                                 .addGap(32, 32, 32)
-                                .addComponent(textFieldNewPass))
+                                .addComponent(labelFieldNewPass))
                             .addComponent(labelRepeatPass, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,7 +229,7 @@ public class ViewProfile extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(checkBoxChangePass)
                             .addComponent(pwFieldNewPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textFieldNewPass)
+                            .addComponent(labelFieldNewPass)
                             .addComponent(pwFieldActualPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labelActualPass))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
@@ -342,12 +346,12 @@ public class ViewProfile extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel labelActualPass;
+    private javax.swing.JLabel labelFieldNewPass;
     private javax.swing.JLabel labelNombre;
     private javax.swing.JLabel labelRepeatPass;
     private javax.swing.JPasswordField pwFieldActualPass;
     private javax.swing.JPasswordField pwFieldNewPass;
     private javax.swing.JPasswordField pwFieldRepeatNewPass;
-    private javax.swing.JLabel textFieldNewPass;
     private javax.swing.JTextField textFieldNombre;
     // End of variables declaration//GEN-END:variables
 }
