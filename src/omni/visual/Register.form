@@ -79,11 +79,11 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="labelPass" min="-2" pref="71" max="-2" attributes="0"/>
-                          <Component id="labelUser" min="-2" pref="51" max="-2" attributes="0"/>
-                          <Component id="labelRepeatPass" min="-2" pref="103" max="-2" attributes="0"/>
+                          <Component id="labelUser" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labelRepeatPass" alignment="0" max="32767" attributes="0"/>
+                          <Component id="labelPass" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="textFieldUser" pref="115" max="32767" attributes="0"/>
                           <Component id="passField" alignment="1" max="32767" attributes="0"/>

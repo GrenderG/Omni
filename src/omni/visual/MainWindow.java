@@ -38,7 +38,7 @@ import omni.model.WriteToJSON;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-    private static final String CURRENT_VERSION = "0.40";
+    private static final String CURRENT_VERSION = "0.41";
     private static final String RUNNING_OS = OSController.getOS();
 
     private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
@@ -143,10 +143,10 @@ public class MainWindow extends javax.swing.JFrame {
         }
 
         /*Asignada a la tabla la ordenación. */
-        TableRowSorter<GestionWebModel> webSorter
+        /*TableRowSorter<GestionWebModel> webSorter
                 = new TableRowSorter<>((GestionWebModel) this.tablaWeb.getModel());
 
-        this.tablaWeb.setRowSorter(webSorter);
+        this.tablaWeb.setRowSorter(webSorter);*/
 
         this.btnIniciarWeb.addActionListener(new ActionListener() {
 
@@ -514,10 +514,10 @@ public class MainWindow extends javax.swing.JFrame {
             cell.setCellRenderer(new ColorRenderer());
         }
 
-        TableRowSorter<GestionAppModel> appSorter
+        /*TableRowSorter<GestionAppModel> appSorter
                 = new TableRowSorter<>((GestionAppModel) this.tablaApp.getModel());
 
-        this.tablaApp.setRowSorter(appSorter);
+        this.tablaApp.setRowSorter(appSorter);*/
 
         this.btnRutaApp.addActionListener(new ActionListener() {
 
