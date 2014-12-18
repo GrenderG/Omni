@@ -5,7 +5,6 @@
  */
 package omni.visual;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -14,12 +13,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.export.Exporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import net.sf.jasperreports.view.JasperViewer;
 import omni.controller.AccessReportInfo;
 /**
@@ -57,17 +51,9 @@ public class ReportViewer extends javax.swing.JFrame {
             
             JasperPrint jasperPrint = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(accessReportInfo));
             
-            Exporter exporter = new JRPdfExporter();
-            
-            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(new File("reporte_usuarios.pdf")));
-            SimplePdfExporterConfiguration configuration = new SimplePdfExporterConfiguration();
-            exporter.setConfiguration(configuration);
-            
             JasperViewer viewer = new JasperViewer(jasperPrint);
-            this.jPanel1.add(viewer.getContentPane());
             
-            exporter.exportReport();
+            this.jPanel1.add(viewer.getContentPane());
             
         } catch (JRException ex) {
             ex.printStackTrace();
@@ -85,7 +71,7 @@ public class ReportViewer extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(512, 512));
 
         jPanel1.setPreferredSize(new java.awt.Dimension(512, 512));
