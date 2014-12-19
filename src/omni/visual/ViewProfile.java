@@ -77,7 +77,7 @@ public class ViewProfile extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ReportViewer(accesosCount).setVisible(true);
+                new ReportViewer(accesosCount);
             }
             
         });
