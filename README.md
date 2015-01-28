@@ -1,2 +1,2 @@
 # Omni
-The OpenSource access manager
+The OpenSource access manager.
