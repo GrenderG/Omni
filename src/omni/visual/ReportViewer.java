@@ -52,7 +52,7 @@ public class ReportViewer {
             JasperPrint jasperPrint = JasperFillManager.fillReport
                 (report, null, new JRBeanCollectionDataSource(accessReportInfo));
 
-            JasperViewer.viewReport(jasperPrint);
+            JasperViewer.viewReport(jasperPrint, false);
         } catch (JRException ex) {
             ex.printStackTrace();
         }

@@ -6,30 +6,35 @@
 package omni.visual;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.net.URL;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableRowSorter;
 import omni.controller.APPController;
 import omni.controller.ClipboardController;
 import omni.controller.ImageFixer;
 import omni.controller.OSController;
 import omni.controller.URLController;
-import omni.model.User;
 import omni.model.GestionAppModel;
 import omni.model.GestionWebModel;
 import omni.model.ReadFromJSON;
+import omni.model.User;
 import omni.model.WriteToJSON;
 
 /**
@@ -83,7 +88,8 @@ public class MainWindow extends javax.swing.JFrame {
         this.pass = pass;
 
         initComponents();
-
+        cargarAyuda();
+        
         /*Quitando filtro "Todos los archivos" y añadiendo filtro personalizado.*/
         jfImage.removeChoosableFileFilter(jfImage.getAcceptAllFileFilter());
         jfImage.setFileFilter(imageFilter);
@@ -860,7 +866,25 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
     }
+    
+        private void cargarAyuda(){
+        
+        try{
+            
+            File f = new File("src/help/help.hs");
+            URL hsURL = f.toURI().toURL();
 
+            HelpSet helpset = new HelpSet(getClass().getClassLoader(), hsURL);
+            HelpBroker hb = helpset.createHelpBroker();
+            
+            hb.enableHelpOnButton(this.jMenuItem3, "licencia", helpset);
+            hb.enableHelpKey(this.getContentPane(), "licencia", helpset);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -1462,7 +1486,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         jMenu3.setText("Ayuda");
 
-        jMenuItem3.setText("Guia rápida");
+        jMenuItem3.setText("Contenidos de Ayuda");
         jMenu3.add(jMenuItem3);
 
         jMenuItem4.setText("Acerca de...");
