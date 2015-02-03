@@ -2,5 +2,6 @@
 <index version="1.0"> 
 	<indexitem text="Licencia" target="licencia"/> 
 	<indexitem text="Cuentas" target="cuentas"/>
-	<indexitem text="Importar Cuentas" target="importar_cuentas"/>  
+	<indexitem text="Importar Cuentas" target="importar_cuentas"/>
+	<indexitem text="Instrucciones de uso" target="instrucciones"/>  
 </index>

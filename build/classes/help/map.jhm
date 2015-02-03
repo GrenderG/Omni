@@ -2,5 +2,6 @@
 <map version="1.0"> 
 	<mapID target="licencia" url="html/licencia.html" /> 
 	<mapID target="cuentas" url="html/cuentas.html" />
-	<mapID target="importar_cuentas" url="html/importar_cuentas.html" />  
+	<mapID target="importar_cuentas" url="html/importar_cuentas.html" />
+	<mapID target="instrucciones" url="html/instrucciones.html"/>  
 </map>

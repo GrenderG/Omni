@@ -14,7 +14,12 @@
 		<label>Tabla de contenidos</label> 
 		<type>javax.help.TOCView</type> 
 		<data>contenttable.xml</data> 
-	</view>   
+	</view>
+	<view>
+      <name>Favorites</name>
+      <label>Favorites</label>
+      <type>javax.help.FavoritesView</type>
+   </view>   
 	<view> 
 		<name>Indice</name> 
 		<label>El indice</label> 
@@ -25,6 +30,6 @@
 		<name>Buscar</name> 
 		<label>Buscar</label> 
 		<type>javax.help.SearchView</type> 
-		<data engine="com.sun.java.help.search.DefaultSearchEngine"> JavaHelpSearch </data> 
+		<data engine="com.sun.java.help.search.DefaultSearchEngine">JavaHelpSearch</data> 
 	</view>   
 </helpset>

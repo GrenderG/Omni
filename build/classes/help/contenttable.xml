@@ -4,5 +4,8 @@
 
 	<tocitem text="Cuentas" target="cuentas"> 
 		<tocitem text="Importar Cuentas" target="importar_cuentas"/> 
-	</tocitem>  
+	</tocitem>
+
+	<tocitem text="Instrucciones de uso" target="instrucciones"/>
+
 </toc>
