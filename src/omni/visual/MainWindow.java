@@ -871,7 +871,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         try{
             
-            File f = new File("src/help/help.hs");
+            File f = new File("src/help/help.hs");           
             URL hsURL = f.toURI().toURL();
 
             HelpSet helpset = new HelpSet(getClass().getClassLoader(), hsURL);
