@@ -3,11 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/G:/Proyectos%20Java/OMNI/Omni/src/omni/visual/MainWindow.java</file>
             <file>file:/G:/Proyectos%20Java/OMNI/Omni/src/omni/visual/Login.java</file>
             <file>file:/G:/Proyectos%20Java/OMNI/Omni/src/omni/visual/Register.java</file>
             <file>file:/G:/Proyectos%20Java/OMNI/Omni/src/omni/model/WriteToJSON.java</file>
             <file>file:/G:/Proyectos%20Java/OMNI/Omni/src/omni/visual/ViewProfile.java</file>
+=======
+            <file>file:/home/campus/NetBeansProjects/GitHub/Omni/src/omni/visual/MainWindow.java</file>
+            <file>file:/home/campus/NetBeansProjects/GitHub/Omni/src/omni/visual/ViewProfile.java</file>
+            <file>file:/home/campus/NetBeansProjects/GitHub/Omni/src/omni/visual/ReportViewer.java</file>
+            <file>file:/home/campus/NetBeansProjects/GitHub/Omni/build.xml</file>
+>>>>>>> 5fbaa29fc289ada902b56dbe9653dee302ef040d
         </group>
     </open-files>
 </project-private>

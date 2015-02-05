@@ -870,8 +870,14 @@ public class MainWindow extends javax.swing.JFrame {
         private void cargarAyuda(){
         
         try{
+<<<<<<< HEAD
                      
             URL hsURL = MainWindow.class.getResource("/help/help.hs");
+=======
+            
+            File f = new File("src/help/help.hs");           
+            URL hsURL = f.toURI().toURL();
+>>>>>>> 5fbaa29fc289ada902b56dbe9653dee302ef040d
 
             HelpSet helpset = new HelpSet(getClass().getClassLoader(), hsURL);
             HelpBroker hb = helpset.createHelpBroker();
