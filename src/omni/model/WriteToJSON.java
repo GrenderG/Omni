@@ -42,6 +42,10 @@ public class WriteToJSON {
         }
     }
     
+    public boolean canWriteJSon(){
+        return users.canWrite();
+    }
+    
     /*Copia la info de users.json a un archivo temporal exactamente igual 
     menos la linea que hemos modificado (la que hace referencia al user 
     actual con datos modificados, posteriormente renombra el archivo temporal

@@ -20,7 +20,7 @@ import omni.model.ReadFromJSON;
  */
 public class Login extends javax.swing.JFrame {
 
-    private static final ImageIcon icon = new ImageIcon(Login.class.getResource("/res/icon.png"));
+    private static final ImageIcon icon = new ImageIcon(Login.class.getResource("/res/img/icon.png"));
 
     public Login() {
         initComponents();
@@ -162,7 +162,7 @@ public class Login extends javax.swing.JFrame {
         );
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/background.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/background.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

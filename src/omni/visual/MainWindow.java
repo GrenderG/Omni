@@ -46,7 +46,7 @@ public class MainWindow extends javax.swing.JFrame {
     private static final String CURRENT_VERSION = "0.41";
     private static final String RUNNING_OS = OSController.getOS();
 
-    private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
+    private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/img/icon.png"));
     private static final FileFilter imageFilter = new FileNameExtensionFilter("Imágenes", ImageIO.getReaderFileSuffixes());
 
     private static final JFileChooser jfImage = new JFileChooser();
@@ -110,11 +110,11 @@ public class MainWindow extends javax.swing.JFrame {
         this.labelRunningOsWeb.setToolTipText("Corriendo en " + RUNNING_OS);
 
         if (RUNNING_OS.equals("Windows")) {
-            this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/windows.png")));
+            this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/img/windows.png")));
         } else if (RUNNING_OS.equals("Linux")) {
-            this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/linux.png")));
+            this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/img/linux.png")));
         } else if (RUNNING_OS.equals("OSx")) {
-            this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/osx.png")));
+            this.labelRunningOsWeb.setIcon(new ImageIcon(MainWindow.class.getResource("/res/img/osx.png")));
         } else {
             this.labelRunningOsWeb.setText("Unknown");
         }
@@ -486,11 +486,11 @@ public class MainWindow extends javax.swing.JFrame {
         this.labelRunningOsApp.setToolTipText("Corriendo en " + RUNNING_OS);
 
         if (RUNNING_OS.equals("Windows")) {
-            this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/windows.png")));
+            this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/img/windows.png")));
         } else if (RUNNING_OS.equals("Linux")) {
-            this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/linux.png")));
+            this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/img/linux.png")));
         } else if (RUNNING_OS.equals("OSx")) {
-            this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/osx.png")));
+            this.labelRunningOsApp.setIcon(new ImageIcon(MainWindow.class.getResource("/res/img/osx.png")));
         } else {
             this.labelRunningOsApp.setText("Unknown");
         }
@@ -870,9 +870,8 @@ public class MainWindow extends javax.swing.JFrame {
         private void cargarAyuda(){
         
         try{
-            
-            File f = new File("src/help/help.hs");
-            URL hsURL = f.toURI().toURL();
+                     
+            URL hsURL = MainWindow.class.getResource("/help/help.hs");
 
             HelpSet helpset = new HelpSet(getClass().getClassLoader(), hsURL);
             HelpBroker hb = helpset.createHelpBroker();
@@ -991,20 +990,20 @@ public class MainWindow extends javax.swing.JFrame {
 
         panelBotonesWeb.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        btnAnyadirWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/add_file-26.png"))); // NOI18N
+        btnAnyadirWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/add_file-26.png"))); // NOI18N
         btnAnyadirWeb.setText("Añadir");
         btnAnyadirWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        btnModificarWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/edit_file-26.png"))); // NOI18N
+        btnModificarWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/edit_file-26.png"))); // NOI18N
         btnModificarWeb.setText("Modificar");
         btnModificarWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        btnEliminarWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete-26.png"))); // NOI18N
+        btnEliminarWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/delete-26.png"))); // NOI18N
         btnEliminarWeb.setText("Eliminar");
         btnEliminarWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         btnIniciarWeb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnIniciarWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/external_link-64.png"))); // NOI18N
+        btnIniciarWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/external_link-64.png"))); // NOI18N
         btnIniciarWeb.setText("¡ INICIAR !");
         btnIniciarWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
@@ -1023,7 +1022,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelBotonesWebLayout.createSequentialGroup()
                         .addComponent(btnAnyadirWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 93, Short.MAX_VALUE))
+                        .addGap(0, 209, Short.MAX_VALUE))
                     .addComponent(versionLabelWeb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelBotonesWebLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1102,18 +1101,18 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        btnOkWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/checkmark-26.png"))); // NOI18N
+        btnOkWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/checkmark-26.png"))); // NOI18N
         btnOkWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnOkWeb.setIconTextGap(0);
         btnOkWeb.setMaximumSize(new java.awt.Dimension(38, 36));
         btnOkWeb.setMinimumSize(new java.awt.Dimension(38, 36));
         btnOkWeb.setPreferredSize(new java.awt.Dimension(38, 36));
 
-        btnCancelWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/cancel-2-24.png"))); // NOI18N
+        btnCancelWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/cancel-2-24.png"))); // NOI18N
         btnCancelWeb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCancelWeb.setIconTextGap(0);
 
-        btnClipboardWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/clipboard-26.png"))); // NOI18N
+        btnClipboardWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/clipboard-26.png"))); // NOI18N
         btnClipboardWeb.setToolTipText("Copiar ruta al portapapeles");
 
         javax.swing.GroupLayout panelEditorWebLayout = new javax.swing.GroupLayout(panelEditorWeb);
@@ -1213,20 +1212,20 @@ public class MainWindow extends javax.swing.JFrame {
 
         panelBotonesApp.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        btnAnyadirApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/add_file-26.png"))); // NOI18N
+        btnAnyadirApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/add_file-26.png"))); // NOI18N
         btnAnyadirApp.setText("Añadir");
         btnAnyadirApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        btnModificarApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/edit_file-26.png"))); // NOI18N
+        btnModificarApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/edit_file-26.png"))); // NOI18N
         btnModificarApp.setText("Modificar");
         btnModificarApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        btnEliminarApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete-26.png"))); // NOI18N
+        btnEliminarApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/delete-26.png"))); // NOI18N
         btnEliminarApp.setText("Eliminar");
         btnEliminarApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         btnIniciarApp.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnIniciarApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/external_link-64.png"))); // NOI18N
+        btnIniciarApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/external_link-64.png"))); // NOI18N
         btnIniciarApp.setText("¡ INICIAR !");
         btnIniciarApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
@@ -1245,7 +1244,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelBotonesAppLayout.createSequentialGroup()
                         .addComponent(btnAnyadirApp, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 93, Short.MAX_VALUE))
+                        .addGap(0, 209, Short.MAX_VALUE))
                     .addComponent(versionLabelApp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelBotonesAppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1324,18 +1323,18 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        btnOkApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/checkmark-26.png"))); // NOI18N
+        btnOkApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/checkmark-26.png"))); // NOI18N
         btnOkApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnOkApp.setIconTextGap(0);
         btnOkApp.setMaximumSize(new java.awt.Dimension(38, 36));
         btnOkApp.setMinimumSize(new java.awt.Dimension(38, 36));
         btnOkApp.setPreferredSize(new java.awt.Dimension(38, 36));
 
-        btnCancelApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/cancel-2-24.png"))); // NOI18N
+        btnCancelApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/cancel-2-24.png"))); // NOI18N
         btnCancelApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCancelApp.setIconTextGap(0);
 
-        btnClipboardApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/clipboard-26.png"))); // NOI18N
+        btnClipboardApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/clipboard-26.png"))); // NOI18N
         btnClipboardApp.setToolTipText("Copiar ruta al portapapeles");
 
         btnRutaApp.setText("...");

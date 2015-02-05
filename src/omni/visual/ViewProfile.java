@@ -32,7 +32,7 @@ public class ViewProfile extends javax.swing.JFrame {
     private static final Color BG_GENERAL_BLUE = new Color(202, 238, 255);
     private static final Color BG_RESOURCE_LIGHT_BLUE = new Color(235, 248, 255);
 
-    private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/icon.png"));
+    private static final ImageIcon icon = new ImageIcon(MainWindow.class.getResource("/res/img/icon.png"));
 
     private WriteToJSON wtjson = new WriteToJSON();
 
@@ -188,7 +188,7 @@ public class ViewProfile extends javax.swing.JFrame {
 
         labelFieldNewPass.setText("Nueva: ");
 
-        btnChangePass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/checkmark-26.png"))); // NOI18N
+        btnChangePass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/img/checkmark-26.png"))); // NOI18N
 
         pwFieldRepeatNewPass.setToolTipText("Repite la nueva contraseña");
 

@@ -5,6 +5,8 @@
  */
 package omni.visual;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -47,7 +49,10 @@ public class ReportViewer {
        
     private void generatePDF() {
         try {
-            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile("viewProfileReport.jasper");
+            
+            URL f = ReportViewer.class.getResource("/res/jasper/viewProfileReport.jasper");
+            
+            JasperReport report = (JasperReport) JRLoader.loadObject(f);
             
             JasperPrint jasperPrint = JasperFillManager.fillReport
                 (report, null, new JRBeanCollectionDataSource(accessReportInfo));

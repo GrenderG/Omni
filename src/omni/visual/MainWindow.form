@@ -191,7 +191,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="btnAnyadirWeb" min="-2" pref="128" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="93" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="209" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="versionLabelWeb" max="32767" attributes="0"/>
                               </Group>
@@ -238,7 +238,7 @@
                     <Component class="javax.swing.JButton" name="btnAnyadirWeb">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/add_file-26.png"/>
+                          <Image iconType="3" name="/res/img/add_file-26.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -249,7 +249,7 @@
                     <Component class="javax.swing.JButton" name="btnModificarWeb">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/edit_file-26.png"/>
+                          <Image iconType="3" name="/res/img/edit_file-26.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Modificar"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -260,7 +260,7 @@
                     <Component class="javax.swing.JButton" name="btnEliminarWeb">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/delete-26.png"/>
+                          <Image iconType="3" name="/res/img/delete-26.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Eliminar"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -274,7 +274,7 @@
                           <Font name="Tahoma" size="14" style="1"/>
                         </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/external_link-64.png"/>
+                          <Image iconType="3" name="/res/img/external_link-64.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="&#xa1; INICIAR !"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -487,7 +487,7 @@
                     <Component class="javax.swing.JButton" name="btnOkWeb">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/checkmark-26.png"/>
+                          <Image iconType="3" name="/res/img/checkmark-26.png"/>
                         </Property>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                           <Color id="Cursor de Mano"/>
@@ -507,7 +507,7 @@
                     <Component class="javax.swing.JButton" name="btnCancelWeb">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/cancel-2-24.png"/>
+                          <Image iconType="3" name="/res/img/cancel-2-24.png"/>
                         </Property>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                           <Color id="Cursor de Mano"/>
@@ -518,7 +518,7 @@
                     <Component class="javax.swing.JButton" name="btnClipboardWeb">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/clipboard-26.png"/>
+                          <Image iconType="3" name="/res/img/clipboard-26.png"/>
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" value="Copiar ruta al portapapeles"/>
                       </Properties>
@@ -613,7 +613,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="btnAnyadirApp" min="-2" pref="128" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="93" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="209" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="versionLabelApp" max="32767" attributes="0"/>
                               </Group>
@@ -660,7 +660,7 @@
                     <Component class="javax.swing.JButton" name="btnAnyadirApp">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/add_file-26.png"/>
+                          <Image iconType="3" name="/res/img/add_file-26.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -671,7 +671,7 @@
                     <Component class="javax.swing.JButton" name="btnModificarApp">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/edit_file-26.png"/>
+                          <Image iconType="3" name="/res/img/edit_file-26.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Modificar"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -682,7 +682,7 @@
                     <Component class="javax.swing.JButton" name="btnEliminarApp">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/delete-26.png"/>
+                          <Image iconType="3" name="/res/img/delete-26.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Eliminar"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -696,7 +696,7 @@
                           <Font name="Tahoma" size="14" style="1"/>
                         </Property>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/external_link-64.png"/>
+                          <Image iconType="3" name="/res/img/external_link-64.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="&#xa1; INICIAR !"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -916,7 +916,7 @@
                     <Component class="javax.swing.JButton" name="btnOkApp">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/checkmark-26.png"/>
+                          <Image iconType="3" name="/res/img/checkmark-26.png"/>
                         </Property>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                           <Color id="Cursor de Mano"/>
@@ -936,7 +936,7 @@
                     <Component class="javax.swing.JButton" name="btnCancelApp">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/cancel-2-24.png"/>
+                          <Image iconType="3" name="/res/img/cancel-2-24.png"/>
                         </Property>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                           <Color id="Cursor de Mano"/>
@@ -947,7 +947,7 @@
                     <Component class="javax.swing.JButton" name="btnClipboardApp">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                          <Image iconType="3" name="/res/clipboard-26.png"/>
+                          <Image iconType="3" name="/res/img/clipboard-26.png"/>
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" value="Copiar ruta al portapapeles"/>
                       </Properties>

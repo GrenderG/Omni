@@ -21,7 +21,7 @@ import omni.model.WriteToJSON;
  */
 public class Register extends javax.swing.JFrame {
 
-    private static final ImageIcon icon = new ImageIcon(Register.class.getResource("/res/icon.png"));
+    private static final ImageIcon icon = new ImageIcon(Register.class.getResource("/res/img/icon.png"));
     
     public Register() {
         initComponents();
@@ -53,10 +53,17 @@ public class Register extends javax.swing.JFrame {
                         WriteToJSON jsonWriter = new WriteToJSON();
                         
                         if (rfjson.readUser(nombre) == null) {
-                            jsonWriter.writeElement(new User(nombre, pass));
-                            JFrame mainWindow = new MainWindow(nombre, pass);
-                            mainWindow.setVisible(true);
-                            Register.this.dispose();
+                           
+                            if (jsonWriter.canWriteJSon()){
+                                jsonWriter.writeElement(new User(nombre, pass));
+                                JFrame mainWindow = new MainWindow(nombre, pass);
+                                mainWindow.setVisible(true);
+                                Register.this.dispose();                            
+                            }else{
+                                JOptionPane.showMessageDialog(null, "Debes registrarte iniciando la aplicación como administrador.",
+                                        "Error al registrar", JOptionPane.ERROR_MESSAGE);
+                            }
+
                         }else{
                             JOptionPane.showMessageDialog(null, "Ese usuario ya existe.", 
                             "Error al registrar", JOptionPane.ERROR_MESSAGE);
